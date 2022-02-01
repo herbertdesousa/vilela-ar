@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id             String          @id() @default(uuid())
+  name           String
+  document       String?
+  type           CustomerType    @default(PERSONAL)
+  representative String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  FinanceIncome  FinanceIncome[]
+}
+
+enum CustomerType {
+  PERSONAL
+  ENTITY
+}
+
+model Finance {
+  id               String          @id() @default(uuid())
+  financeIncome    FinanceIncome?  @relation(fields: [financeIncomeId], references: [id], onDelete: Cascade)
+  financeOutcome   FinanceOutcome? @relation(fields: [financeOutcomeId], references: [id], onDelete: Cascade)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  financeIncomeId  String?
+  financeOutcomeId String?
+}
+
+model FinanceIncome {
+  id          String    @id() @default(uuid())
+  date        DateTime  @db.Date
+  customer    Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  value       Int
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  customerId  String
+  Finance     Finance[]
+}
+
+model FinanceOutcome {
+  id          String    @id() @default(uuid())
+  date        DateTime  @db.Date
+  value       Int
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Finance     Finance[]
+}
