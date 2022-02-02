@@ -4,14 +4,15 @@ import {
   Delete,
   Get,
   NotFoundException,
-  ParseArrayPipe,
   ParseIntPipe,
   ParseUUIDPipe,
   Post,
   Put,
   Query,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { FinanceIncome, FinanceOutcome } from '@prisma/client';
+import { PrismaService } from 'src/common/services/prisma/prisma.service';
 
 import { SaveFinanceDto } from './dto/save-finance.dto';
 
@@ -19,12 +20,29 @@ import { FinanceService } from './finance.service';
 
 @Controller('finances')
 export class FinanceController {
-  constructor(private financeService: FinanceService) {}
+  constructor(
+    private financeService: FinanceService,
+    private prisma: PrismaService,
+  ) {}
 
   @Post()
   async create(
     @Body() body?: SaveFinanceDto,
   ): Promise<FinanceIncome | FinanceOutcome> {
+    if (
+      body.customerId &&
+      !(await this.prisma.customer.findFirst({
+        where: { id: body.customerId },
+      }))
+    ) {
+      throw new UnprocessableEntityException({
+        message: 'The given data was invalid.',
+        errors: {
+          customerId: 'não encontrado',
+        },
+      });
+    }
+
     return await this.financeService.create(body);
   }
 

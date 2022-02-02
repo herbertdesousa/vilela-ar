@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Finance, FinanceIncome, FinanceOutcome } from '@prisma/client';
+import { FinanceIncome, FinanceOutcome } from '@prisma/client';
 import { PrismaService } from 'src/common/services/prisma/prisma.service';
 
 import { SaveFinanceDto } from './dto/save-finance.dto';
@@ -17,7 +17,11 @@ export class FinanceService {
       skip: limit * page,
       take: limit,
       include: {
-        financeIncome: true,
+        financeIncome: {
+          include: {
+            customer: true,
+          },
+        },
         financeOutcome: true,
       },
     });
@@ -35,8 +39,8 @@ export class FinanceService {
         data: {
           date: payload.date,
           description: payload.description,
-          customerId: payload.customerId,
           value: payload.value,
+          ...(payload.customerId && { customerId: payload.customerId }),
         },
       });
       await this.prisma.finance.create({

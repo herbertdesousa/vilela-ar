@@ -44,7 +44,7 @@ model FinanceIncome {
   description String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  customerId  String
+  customerId  String?
   Finance     Finance[]
 }
 

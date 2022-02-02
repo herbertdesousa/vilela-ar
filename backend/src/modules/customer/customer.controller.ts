@@ -45,6 +45,8 @@ export class CustomerController {
     try {
       return await this.customerService.delete(id);
     } catch (err) {
+      console.log(err);
+
       throw new NotFoundException('not found customer with id ' + id);
     }
   }
