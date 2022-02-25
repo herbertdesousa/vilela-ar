@@ -1,0 +1,31 @@
+.root {
+  @apply relative transition-all flex items-center z-10 justify-center
+  font-semibold whitespace-nowrap text-base uppercase
+  border border-accent-3
+}
+
+.root::before {
+  content: '';
+  z-index: -10;
+  @apply absolute left-0 w-0 h-full bg-accent-6 transition-all opacity-10
+}
+
+.root:hover::before {
+  @apply w-full
+}
+
+.variant-light {
+  @apply text-accent-0;
+}
+
+.variant-dark {
+  @apply text-accent-6;
+}
+
+.size-normal {
+  @apply py-4 px-6
+}
+
+.size-sm {
+  @apply py-2 px-6
+}
