@@ -5,7 +5,7 @@ import { MdRoom } from 'react-icons/md';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-accent-4">
+    <footer className="bg-accent-4 mt-24">
       <Grid>
         <div
           className="

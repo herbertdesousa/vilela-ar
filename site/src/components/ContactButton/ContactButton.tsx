@@ -1,19 +1,22 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import React, { AnchorHTMLAttributes } from 'react';
 
 import { FaWhatsapp } from 'react-icons/fa';
 import classNames from 'classnames';
 
 import style from './ContactButton.module.css';
 
-export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+const PHONE = '5511998620875';
+export interface IButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   variant?: 'light' | 'dark';
   size?: 'normal' | 'sm';
+  messageToSend?: string;
 }
 
 const Button: React.FC<IButtonProps> = ({
   children,
   variant = 'dark',
   size = 'normal',
+  messageToSend = '',
   ...props
 }) => {
   const { className, ...rest } = props;
@@ -30,10 +33,17 @@ const Button: React.FC<IButtonProps> = ({
   );
 
   return (
-    <button type="button" className={rootClassName} {...rest}>
+    <a
+      type="button"
+      className={rootClassName}
+      rel="noreferrer"
+      target="_blank"
+      href={`https://api.whatsapp.com/send?phone=${PHONE}&text=${messageToSend}`}
+      {...rest}
+    >
       <FaWhatsapp size={20} className="mr-4" />
       {children}
-    </button>
+    </a>
   );
 };
 

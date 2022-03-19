@@ -1,6 +1,5 @@
 import React from 'react';
-
-// import { Container } from './styles';
+import Image from 'next/image';
 
 const Brands: React.FC = () => {
   return (
@@ -12,29 +11,17 @@ const Brands: React.FC = () => {
       <h3 className="font-semibold text-2xl">MARCAS</h3>
 
       <ul className="flex mt-4 px-6 max-w-full overflow-x-scroll no-scroll">
-        <li>
-          <div
-            style={{ width: 192, height: 80 }}
-            className="bg-accent-3 rounded-sm mr-4"
-          />
+        <li className="rounded-sm mr-4">
+          <Image src="/home/brands-logos/daikin.png" width={192} height={80} />
         </li>
-        <li>
-          <div
-            style={{ width: 192, height: 80 }}
-            className="bg-accent-3 rounded-sm mr-4"
-          />
+        <li className="rounded-sm mr-4">
+          <Image src="/home/brands-logos/fujitsu.png" width={192} height={80} />
         </li>
-        <li>
-          <div
-            style={{ width: 192, height: 80 }}
-            className="bg-accent-3 rounded-sm mr-4"
-          />
+        <li className="rounded-sm mr-4">
+          <Image src="/home/brands-logos/lg.png" width={192} height={80} />
         </li>
-        <li>
-          <div
-            style={{ width: 192, height: 80 }}
-            className="bg-accent-3 rounded-sm"
-          />
+        <li className="rounded-sm mr-4">
+          <Image src="/home/brands-logos/samsung.png" width={192} height={80} />
         </li>
       </ul>
     </section>

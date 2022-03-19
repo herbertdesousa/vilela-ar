@@ -1,0 +1,26 @@
+.root {
+  @apply fixed top-0 z-50 w-full
+}
+
+.container {
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+  transition: 500ms;
+  @apply flex items-center justify-between py-4 px-3 bg-accent-0
+  col-span-4 md:col-span-8 md:px-6 lg:col-start-3
+  transform-gpu -translate-y-24
+}
+.container.scrolled {
+  @apply translate-y-0
+}
+
+.link {
+  @apply ml-4 md:ml-8 text-accent-4 uppercase font-poppins font-medium
+}
+.link:first-child {
+  @apply ml-0
+}
+.link.active {
+  @apply text-primary
+}
+

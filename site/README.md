@@ -1,18 +1,8 @@
-# Members
-## Image **not yet implementent**
-- Panel
-[ ] send
+[] colocar conteúdos
+[] colocar imagens
 
-- Chat
-[ ] receive
 
-- Contacts
-[ ] last message as
+# Easier budget
+do questions like "how many air conditiong will be installed, where and when"
+before send whatsapp message
 
-## Reply Message **not yet implementent**
-- Chat
-[ ] receive
-[ ] send
-
-- Contacts
-[ ] last message as

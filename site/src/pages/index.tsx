@@ -1,14 +1,17 @@
 import React from 'react';
 
+import { Nav } from '@/components';
 import * as HomeModules from '../modules/home';
 
 const Home: React.FC = () => {
   return (
     <>
+      <Nav active="home" />
       <HomeModules.Hero />
-      <HomeModules.Brands />
+      <div className="my-4 h-24 w-full bg-accent-2" />
+      {/* <HomeModules.Brands /> */}
       <HomeModules.Services />
-      <HomeModules.Blog />
+      {/* <HomeModules.Blog /> */}
       <HomeModules.Footer />
     </>
   );

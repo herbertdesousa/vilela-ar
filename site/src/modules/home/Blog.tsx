@@ -4,7 +4,7 @@ import { MdArrowForward } from 'react-icons/md';
 
 const Blog: React.FC = () => {
   return (
-    <section className="relative flex flex-col items-center py-12 mt-10">
+    <section className="relative flex flex-col items-center py-12 mt-16">
       <div
         style={{ zIndex: -1, height: '60%' }}
         className="absolute top-0 w-full bg-accent-2"
