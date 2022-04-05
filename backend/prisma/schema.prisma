@@ -11,14 +11,15 @@ datasource db {
 }
 
 model Customer {
-  id             String          @id() @default(uuid())
-  name           String
-  document       String?
-  type           CustomerType    @default(PERSONAL)
-  representative String?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  FinanceIncome  FinanceIncome[]
+  id              String            @id() @default(uuid())
+  name            String
+  document        String?
+  type            CustomerType      @default(PERSONAL)
+  representative  String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  FinanceIncome   FinanceIncome[]
+  CustomerAddress CustomerAddress[]
 }
 
 enum CustomerType {
@@ -26,6 +27,22 @@ enum CustomerType {
   ENTITY
 }
 
+model CustomerAddress {
+  id           String   @id() @default(uuid())
+  street       String
+  number       String?
+  complement   String?
+  neighborhood String?
+  city         String?
+  state        String?
+  postalCode   String?
+  customer     Customer @relation(fields: [customerId], references: [id])
+  customerId   String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Finance
 model Finance {
   id               String          @id() @default(uuid())
   financeIncome    FinanceIncome?  @relation(fields: [financeIncomeId], references: [id], onDelete: Cascade)

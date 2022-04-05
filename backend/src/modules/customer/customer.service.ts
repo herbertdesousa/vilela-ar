@@ -94,4 +94,10 @@ export class CustomerService {
       where: { id },
     });
   }
+
+  async findOne(id: string): Promise<Customer> {
+    return await this.prisma.customer.findFirst({
+      where: { id },
+    });
+  }
 }
