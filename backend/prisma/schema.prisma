@@ -111,3 +111,28 @@ enum DocumentType {
   RECIPT
   BUDGET
 }
+
+// Document Refs
+model DocumentRefPlaceDeviceBrand {
+  name String @id() @unique()
+}
+
+model DocumentRefPlaceDeviceCapacity {
+  name String @id() @unique()
+}
+
+model DocumentRefPlaceDeviceMode {
+  name String @id() @unique()
+}
+
+model DocumentRefPlaceRoom {
+  name String @id() @unique()
+}
+
+model DocumentRefPlaceFloor {
+  name String @id() @unique()
+}
+
+model DocumentRefMaterialItem {
+  name String @id() @unique()
+}
