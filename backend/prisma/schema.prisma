@@ -114,38 +114,85 @@ enum DocumentType {
 }
 
 model DocumentBlock {
-  id                     String                @id() @default(uuid())
-  document               Document              @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  id                     String                  @id() @default(uuid())
+  document               Document                @relation(fields: [documentId], references: [id], onDelete: Cascade)
   documentId             String
   price                  Int?
   description            String?
-  documentRefBlockName   DocumentRefBlockName? @relation(fields: [documentRefBlockNameId], references: [name], onDelete: SetNull)
+  documentRefBlockName   DocumentRefBlockName?   @relation(fields: [documentRefBlockNameId], references: [name], onDelete: SetNull)
   documentRefBlockNameId String?
+  documentBlockMaterial  DocumentBlockMaterial[]
+  DocumentBlockPlace     DocumentBlockPlace[]
+}
+
+model DocumentBlockMaterial {
+  id                    String               @id() @default(uuid())
+  documentBlock         DocumentBlock        @relation(fields: [documentBlockId], references: [id], onDelete: Cascade)
+  documentBlockId       String
+  documentRefMaterial   DocumentRefMaterial? @relation(fields: [documentRefMaterialId], references: [name], onDelete: SetNull)
+  documentRefMaterialId String?
+}
+
+model DocumentBlockPlace {
+  id                       String                     @id() @default(uuid())
+  documentBlock            DocumentBlock              @relation(fields: [documentBlockId], references: [id], onDelete: Cascade)
+  documentBlockId          String
+  documentRefPlaceFloor    DocumentRefPlaceFloor?     @relation(fields: [documentRefPlaceFloorId], references: [name], onDelete: SetNull)
+  documentRefPlaceFloorId  String?
+  documentRefPlaceRoom     DocumentRefPlaceRoom?      @relation(fields: [documentRefPlaceRoomId], references: [name], onDelete: SetNull)
+  documentRefPlaceRoomId   String?
+  DocumentBlockPlaceDevice DocumentBlockPlaceDevice[]
+}
+
+model DocumentBlockPlaceDevice {
+  id                          String                       @id() @default(uuid())
+  documentBlockPlace          DocumentBlockPlace           @relation(fields: [documentBlockPlaceId], references: [id], onDelete: Cascade)
+  documentBlockPlaceId        String
+  quantity                    Int                          @default(1)
+  type                        DocumentBlockPlaceDeviceType @default(INSIDE)
+  documentRefDeviceBrand      DocumentRefDeviceBrand?      @relation(fields: [documentRefDeviceBrandId], references: [name], onDelete: SetNull)
+  documentRefDeviceBrandId    String?
+  documentRefDeviceCapacity   DocumentRefDeviceCapacity?   @relation(fields: [documentRefDeviceCapacityId], references: [name], onDelete: SetNull)
+  documentRefDeviceCapacityId String?
+  documentRefDeviceMode       DocumentRefDeviceMode?       @relation(fields: [documentRefDeviceModeId], references: [name], onDelete: SetNull)
+  documentRefDeviceModeId     String?
+}
+
+enum DocumentBlockPlaceDeviceType {
+  INSIDE
+  OUTSIDE
+  BOTH
 }
 
 // Document Refs
-model DocumentRefPlaceDeviceBrand {
-  name String @id() @unique()
+model DocumentRefDeviceBrand {
+  name                     String                     @id() @unique()
+  DocumentBlockPlaceDevice DocumentBlockPlaceDevice[]
 }
 
-model DocumentRefPlaceDeviceCapacity {
-  name String @id() @unique()
+model DocumentRefDeviceCapacity {
+  name                     String                     @id() @unique()
+  DocumentBlockPlaceDevice DocumentBlockPlaceDevice[]
 }
 
-model DocumentRefPlaceDeviceMode {
-  name String @id() @unique()
+model DocumentRefDeviceMode {
+  name                     String                     @id() @unique()
+  DocumentBlockPlaceDevice DocumentBlockPlaceDevice[]
 }
 
 model DocumentRefPlaceRoom {
-  name String @id() @unique()
+  name               String               @id() @unique()
+  DocumentBlockPlace DocumentBlockPlace[]
 }
 
 model DocumentRefPlaceFloor {
-  name String @id() @unique()
+  name               String               @id() @unique()
+  DocumentBlockPlace DocumentBlockPlace[]
 }
 
-model DocumentRefMaterialItem {
-  name String @id() @unique()
+model DocumentRefMaterial {
+  name                  String                  @id() @unique()
+  DocumentBlockMaterial DocumentBlockMaterial[]
 }
 
 model DocumentRefBlockName {

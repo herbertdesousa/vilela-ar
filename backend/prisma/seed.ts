@@ -13,49 +13,48 @@ const documentRefBlockName: Prisma.DocumentRefBlockNameCreateInput[] = [
     name: 'Serviço',
   },
 ];
-const documentRefPlaceDeviceBrand: Prisma.DocumentRefPlaceDeviceBrandCreateInput[] =
-  [
-    {
-      name: 'Samsung',
-    },
-    {
-      name: 'Fujitsu',
-    },
-    {
-      name: 'LG',
-    },
-    {
-      name: 'Midea',
-    },
-    {
-      name: 'Carrier',
-    },
-    {
-      name: 'Elgin',
-    },
-    {
-      name: 'Gree',
-    },
-    {
-      name: 'Hitachi',
-    },
-    {
-      name: 'Springer',
-    },
-    {
-      name: 'Daikin',
-    },
-    {
-      name: 'Consul',
-    },
-    {
-      name: 'Komeco',
-    },
-    {
-      name: 'Fontaine',
-    },
-  ];
-const documentRefPlaceDeviceCapacity: Prisma.DocumentRefPlaceDeviceCapacityCreateInput[] =
+const documentRefDeviceBrand: Prisma.DocumentRefDeviceBrandCreateInput[] = [
+  {
+    name: 'Samsung',
+  },
+  {
+    name: 'Fujitsu',
+  },
+  {
+    name: 'LG',
+  },
+  {
+    name: 'Midea',
+  },
+  {
+    name: 'Carrier',
+  },
+  {
+    name: 'Elgin',
+  },
+  {
+    name: 'Gree',
+  },
+  {
+    name: 'Hitachi',
+  },
+  {
+    name: 'Springer',
+  },
+  {
+    name: 'Daikin',
+  },
+  {
+    name: 'Consul',
+  },
+  {
+    name: 'Komeco',
+  },
+  {
+    name: 'Fontaine',
+  },
+];
+const documentRefDeviceCapacity: Prisma.DocumentRefDeviceCapacityCreateInput[] =
   [
     {
       name: '7.000BTUS',
@@ -109,42 +108,41 @@ const documentRefPlaceDeviceCapacity: Prisma.DocumentRefPlaceDeviceCapacityCreat
       name: '56.000BTUS',
     },
   ];
-const documentRefPlaceDeviceMode: Prisma.DocumentRefPlaceDeviceModeCreateInput[] =
-  [
-    {
-      name: 'Split Cassete(K7) 1 via',
-    },
-    {
-      name: 'Split Cassete(K7) 4 vias',
-    },
-    {
-      name: 'Split',
-    },
-    {
-      name: 'Split Hi-Wall',
-    },
-    {
-      name: 'Split Piso-Teto',
-    },
-    {
-      name: 'Split Quatro-Lados',
-    },
-    {
-      name: 'Split Canto-Teto',
-    },
-    {
-      name: 'Split Inverter',
-    },
-    {
-      name: 'Split Janela',
-    },
-    {
-      name: 'Portátil',
-    },
-    {
-      name: 'VRF',
-    },
-  ];
+const documentRefDeviceMode: Prisma.DocumentRefDeviceModeCreateInput[] = [
+  {
+    name: 'Split Cassete(K7) 1 via',
+  },
+  {
+    name: 'Split Cassete(K7) 4 vias',
+  },
+  {
+    name: 'Split',
+  },
+  {
+    name: 'Split Hi-Wall',
+  },
+  {
+    name: 'Split Piso-Teto',
+  },
+  {
+    name: 'Split Quatro-Lados',
+  },
+  {
+    name: 'Split Canto-Teto',
+  },
+  {
+    name: 'Split Inverter',
+  },
+  {
+    name: 'Split Janela',
+  },
+  {
+    name: 'Portátil',
+  },
+  {
+    name: 'VRF',
+  },
+];
 const documentRefPlaceRoom: Prisma.DocumentRefPlaceRoomCreateInput[] = [
   {
     name: 'Sacada',
@@ -179,7 +177,7 @@ const documentRefPlaceFloor: Prisma.DocumentRefPlaceFloorCreateInput[] = [
     name: 'Segundo Andar',
   },
 ];
-const documentRefMaterialItem: Prisma.DocumentRefMaterialItemCreateInput[] = [
+const documentRefMaterial: Prisma.DocumentRefMaterialCreateInput[] = [
   {
     name: 'Cano de cobre',
   },
@@ -227,12 +225,12 @@ const documentRefMaterialItem: Prisma.DocumentRefMaterialItemCreateInput[] = [
   },
 ];
 const documentRef = {
-  documentRefPlaceDeviceBrand,
-  documentRefPlaceDeviceCapacity,
-  documentRefPlaceDeviceMode,
+  documentRefDeviceBrand,
+  documentRefDeviceCapacity,
+  documentRefDeviceMode,
   documentRefPlaceRoom,
   documentRefPlaceFloor,
-  documentRefMaterialItem,
+  documentRefMaterial,
   documentRefBlockName,
 };
 
