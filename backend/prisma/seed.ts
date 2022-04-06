@@ -2,6 +2,17 @@ import { Prisma, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+const documentRefBlockName: Prisma.DocumentRefBlockNameCreateInput[] = [
+  {
+    name: 'Infraestrutura',
+  },
+  {
+    name: 'Instalação',
+  },
+  {
+    name: 'Serviço',
+  },
+];
 const documentRefPlaceDeviceBrand: Prisma.DocumentRefPlaceDeviceBrandCreateInput[] =
   [
     {
@@ -222,6 +233,7 @@ const documentRef = {
   documentRefPlaceRoom,
   documentRefPlaceFloor,
   documentRefMaterialItem,
+  documentRefBlockName,
 };
 
 async function main() {

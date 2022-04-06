@@ -105,11 +105,22 @@ model Document {
   customerId               String?
   createdAt                DateTime                @default(now())
   updatedAt                DateTime                @updatedAt
+  DocumentBlock            DocumentBlock[]
 }
 
 enum DocumentType {
   RECIPT
   BUDGET
+}
+
+model DocumentBlock {
+  id                     String                @id() @default(uuid())
+  document               Document              @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  documentId             String
+  price                  Int?
+  description            String?
+  documentRefBlockName   DocumentRefBlockName? @relation(fields: [documentRefBlockNameId], references: [name], onDelete: SetNull)
+  documentRefBlockNameId String?
 }
 
 // Document Refs
@@ -135,4 +146,9 @@ model DocumentRefPlaceFloor {
 
 model DocumentRefMaterialItem {
   name String @id() @unique()
+}
+
+model DocumentRefBlockName {
+  name          String          @id() @unique()
+  DocumentBlock DocumentBlock[]
 }
