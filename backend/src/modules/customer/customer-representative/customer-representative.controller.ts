@@ -20,13 +20,7 @@ export class CustomerRepresentativeController {
 
   @Post()
   async create(@Body() body?: SaveCustomerRepresentativeDto): Promise<any> {
-    try {
-      return await this.customerService.create(body);
-    } catch (err) {
-      throw new NotFoundException(
-        'not found customer with id ' + body.customerId,
-      );
-    }
+    return await this.customerService.create(body);
   }
 
   @Get()
