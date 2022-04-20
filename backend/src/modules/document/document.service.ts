@@ -10,13 +10,34 @@ export class DocumentService {
   constructor(private prisma: PrismaService) {}
 
   async create(payload: SaveDocumentDto): Promise<Document> {
-    return await this.prisma.document.create({ data: payload });
-  }
-
-  async update(id: string, payload: SaveDocumentDto): Promise<Document> {
-    return await this.prisma.document.update({
-      where: { id },
-      data: payload,
+    return await this.prisma.document.create({
+      data: {
+        ...(({ blocks, ...rest }) => rest)(payload),
+        documentBlock: {
+          create: payload.blocks.map(({ places, materials, name, ...r }) => ({
+            documentRefBlockNameId: name,
+            ...r,
+            documentBlockMaterial: {
+              create: materials.map((i) => ({ documentRefMaterialId: i })),
+            },
+            documentBlockPlace: {
+              create: places.map((place) => ({
+                documentRefPlaceFloorId: place.floor,
+                documentRefPlaceRoomId: place.room,
+                documentBlockPlaceDevice: {
+                  create: place.devices.map((device) => ({
+                    quantity: device.quantity,
+                    type: device.type,
+                    documentRefDeviceBrandId: device.brand,
+                    documentRefDeviceCapacityId: device.capacity,
+                    documentRefDeviceModeId: device.mode,
+                  })),
+                },
+              })),
+            },
+          })),
+        },
+      },
     });
   }
 

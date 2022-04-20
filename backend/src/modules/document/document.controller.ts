@@ -6,7 +6,6 @@ import {
   Query,
   ParseUUIDPipe,
   Post,
-  Put,
   NotFoundException,
 } from '@nestjs/common';
 import { Document } from '@prisma/client';
@@ -19,25 +18,13 @@ export class DocumentController {
   constructor(private documentService: DocumentService) {}
 
   @Post()
-  async create(@Body() body?: SaveDocumentDto): Promise<Document> {
+  async create(@Body() body?: SaveDocumentDto): Promise<any> {
     return await this.documentService.create(body);
   }
 
   @Get()
   async findAll(): Promise<Document[]> {
     return await this.documentService.findAll();
-  }
-
-  @Put()
-  async update(
-    @Query('id', ParseUUIDPipe) id: string,
-    @Body() body?: SaveDocumentDto,
-  ): Promise<Document> {
-    try {
-      return await this.documentService.update(id, body);
-    } catch (err) {
-      throw new NotFoundException('not found customer with id ' + id);
-    }
   }
 
   @Delete()
