@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsEnum, IsInt } from 'class-validator';
+import { IsNotEmpty, IsEnum, IsInt, IsISO8601 } from 'class-validator';
 
 export class SaveFinanceDto {
   @IsNotEmpty({ message: 'obrigatório' })
+  @IsISO8601({}, { message: 'inválido' })
   date: Date;
 
   @IsNotEmpty({ message: 'obrigatório' })
@@ -13,6 +14,4 @@ export class SaveFinanceDto {
   type: 'income' | 'outcome';
 
   description?: string;
-
-  customerId?: string;
 }

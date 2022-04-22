@@ -19,7 +19,6 @@ model Customer {
   type                   CustomerType             @default(PERSONAL)
   createdAt              DateTime                 @default(now())
   updatedAt              DateTime                 @updatedAt
-  financeIncome          FinanceIncome[]
   customerAddress        CustomerAddress[]
   customerRepresentative CustomerRepresentative[]
   documents              Document[]
@@ -60,35 +59,18 @@ model CustomerRepresentative {
 // -----------------------------------------------------------------------------
 // Finance
 model Finance {
-  id               String          @id() @default(uuid())
-  financeIncome    FinanceIncome?  @relation(fields: [financeIncomeId], references: [id], onDelete: Cascade)
-  financeOutcome   FinanceOutcome? @relation(fields: [financeOutcomeId], references: [id], onDelete: Cascade)
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  financeIncomeId  String?
-  financeOutcomeId String?
+  id          String      @id() @default(uuid())
+  date        DateTime    @db.Date
+  value       Int
+  type        FinanceType @default(OUTCOME)
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
-model FinanceIncome {
-  id          String    @id() @default(uuid())
-  date        DateTime  @db.Date
-  customer    Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
-  value       Int
-  description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  customerId  String?
-  finance     Finance[]
-}
-
-model FinanceOutcome {
-  id          String    @id() @default(uuid())
-  date        DateTime  @db.Date
-  value       Int
-  description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  finance     Finance[]
+enum FinanceType {
+  INCOME
+  OUTCOME
 }
 
 // -----------------------------------------------------------------------------

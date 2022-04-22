@@ -9,10 +9,8 @@ import {
   Post,
   Put,
   Query,
-  UnprocessableEntityException,
 } from '@nestjs/common';
-import { FinanceIncome, FinanceOutcome } from '@prisma/client';
-import { PrismaService } from 'src/common/services/prisma/prisma.service';
+import { Finance } from '@prisma/client';
 
 import { SaveFinanceDto } from './dto/save-finance.dto';
 
@@ -20,55 +18,43 @@ import { FinanceService } from './finance.service';
 
 @Controller('finances')
 export class FinanceController {
-  constructor(
-    private financeService: FinanceService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private financeService: FinanceService) {}
 
   @Post()
-  async create(
-    @Body() body?: SaveFinanceDto,
-  ): Promise<FinanceIncome | FinanceOutcome> {
-    if (
-      body.customerId &&
-      !(await this.prisma.customer.findFirst({
-        where: { id: body.customerId },
-      }))
-    ) {
-      throw new UnprocessableEntityException({
-        message: 'The given data was invalid.',
-        errors: {
-          customerId: 'não encontrado',
-        },
-      });
-    }
-
+  async create(@Body() body?: SaveFinanceDto): Promise<Finance> {
     return await this.financeService.create(body);
   }
 
   @Get()
-  async paginate(
+  async list(
     @Query('limit', ParseIntPipe) limit: number,
     @Query('page', ParseIntPipe) page: number,
-  ): Promise<(FinanceIncome | FinanceOutcome)[]> {
-    return await this.financeService.paginate(limit || 5, page || 0);
+    @Query('filter_date') date: string,
+  ): Promise<Finance[]> {
+    if (date) {
+      return await this.financeService.listInDay(date, {
+        limit: limit || 5,
+        page: page || 0,
+      });
+    }
+    return await this.financeService.list({
+      limit: limit || 5,
+      page: page || 0,
+    });
   }
 
   @Put()
   async update(
     @Query('id', ParseUUIDPipe) id: string,
     @Body() body?: SaveFinanceDto,
-  ): Promise<FinanceIncome | FinanceOutcome> {
+  ): Promise<Finance> {
     return await this.financeService.update(id, body);
   }
 
   @Delete()
-  async delete(
-    @Query('id', ParseUUIDPipe) id: string,
-    @Query('type') type: 'income' | 'outcome',
-  ): Promise<FinanceIncome | FinanceOutcome> {
+  async delete(@Query('id', ParseUUIDPipe) id: string): Promise<Finance> {
     try {
-      return await this.financeService.delete(id, type);
+      return await this.financeService.delete(id);
     } catch (err) {
       throw new NotFoundException(err);
     }

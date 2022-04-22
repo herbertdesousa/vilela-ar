@@ -1,108 +1,59 @@
 import { Injectable } from '@nestjs/common';
 
-import { FinanceIncome, FinanceOutcome } from '@prisma/client';
+import { Finance } from '@prisma/client';
 import { PrismaService } from 'src/common/services/prisma/prisma.service';
 
 import { SaveFinanceDto } from './dto/save-finance.dto';
+
+interface IPaginate {
+  limit: number;
+  page: number;
+}
 
 @Injectable()
 export class FinanceService {
   constructor(private prisma: PrismaService) {}
 
-  async paginate(
-    limit: number,
-    page: number,
-  ): Promise<(FinanceIncome | FinanceOutcome)[]> {
-    const finance = await this.prisma.finance.findMany({
-      skip: limit * page,
-      take: limit,
-      include: {
-        financeIncome: {
-          include: {
-            customer: true,
-          },
+  async listInDay(date: string, paginate: IPaginate): Promise<Finance[]> {
+    return await this.prisma.finance.findMany({
+      skip: paginate.limit * paginate.page,
+      take: paginate.limit,
+      where: {
+        date: {
+          in: new Date(date),
         },
-        financeOutcome: true,
       },
     });
-    return finance.map((i) => ({
-      type: i.financeIncomeId ? 'income' : 'outcome',
-      ...(i.financeIncomeId ? i.financeIncome : i.financeOutcome),
-    }));
   }
 
-  async create(
-    payload: SaveFinanceDto,
-  ): Promise<FinanceIncome | FinanceOutcome> {
-    if (payload.type === 'income') {
-      const financeIncome = await this.prisma.financeIncome.create({
-        data: {
-          date: payload.date,
-          description: payload.description,
-          value: payload.value,
-          ...(payload.customerId && { customerId: payload.customerId }),
-        },
-      });
-      await this.prisma.finance.create({
-        data: {
-          financeIncomeId: financeIncome.id,
-        },
-      });
-
-      return financeIncome;
-    }
-
-    const financeOutcome = await this.prisma.financeOutcome.create({
-      data: {
-        date: payload.date,
-        description: payload.description,
-        value: payload.value,
-      },
+  async list(paginate: IPaginate): Promise<Finance[]> {
+    return await this.prisma.finance.findMany({
+      skip: paginate.limit * paginate.page,
+      take: paginate.limit,
     });
-    await this.prisma.finance.create({
-      data: {
-        financeOutcomeId: financeOutcome.id,
-      },
-    });
-    return financeOutcome;
   }
 
-  async update(
-    id: string,
-    payload: SaveFinanceDto,
-  ): Promise<FinanceIncome | FinanceOutcome> {
-    if (payload.type === 'income') {
-      return await this.prisma.financeIncome.update({
-        where: { id },
-        data: {
-          date: payload.date,
-          description: payload.description,
-          customerId: payload.customerId,
-          value: payload.value,
-        },
-      });
-    }
+  async create(payload: SaveFinanceDto): Promise<Finance> {
+    return await this.prisma.finance.create({
+      data: {
+        ...payload,
+        type: payload.type.toUpperCase() as 'INCOME' | 'OUTCOME',
+      },
+    });
+  }
 
-    return await this.prisma.financeOutcome.update({
+  async update(id: string, payload: SaveFinanceDto): Promise<Finance> {
+    return await this.prisma.finance.update({
       where: { id },
       data: {
-        date: payload.date,
-        description: payload.description,
-        value: payload.value,
+        ...payload,
+        type: payload.type.toUpperCase() as 'INCOME' | 'OUTCOME',
       },
     });
   }
 
-  async delete(
-    id: string,
-    type: 'income' | 'outcome',
-  ): Promise<FinanceIncome | FinanceOutcome> {
-    if (type === 'income') {
-      return await this.prisma.financeIncome.delete({
-        where: { id },
-      });
-    }
-    return await this.prisma.financeOutcome.delete({
+  async delete(id: string): Promise<Finance> {
+    return await this.prisma.finance.delete({
       where: { id },
     });
   }
