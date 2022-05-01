@@ -1,6 +1,5 @@
 .root {
-  border-right: 1px solid;
-  @apply h-screen w-16 border-accent-2 flex flex-col items-center pt-6
+  @apply h-screen w-16 border-r border-accent-2 flex flex-col items-center pt-6
 }
 
 .pages {

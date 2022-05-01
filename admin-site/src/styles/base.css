@@ -57,6 +57,10 @@ h1, h2, h3, h4, h5, h6, strong {
   color: var(--accent-6);
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 .no-scroll::-webkit-scrollbar {
   display: none;
 }

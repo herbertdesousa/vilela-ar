@@ -1,0 +1,38 @@
+.root {
+  @apply flex items-center h-14 bg-accent-1 transition rounded relative pl-4;
+}
+.root-focus {
+  @apply bg-accent-2 transition;
+}
+
+.textfield {
+  @apply bg-transparent font-medium text-accent-4 w-full;
+}
+
+.label {
+  @apply top-0 text-base absolute transition-all ;
+}
+.label-active {
+  @apply -top-3 text-xs text-primary;
+}
+.label-error {
+  @apply text-red;
+}
+
+.icon {
+  @apply text-accent-3 transition m-4 ml-0;
+}
+.icon-active {
+  @apply text-primary transition;
+}
+.icon-error {
+  @apply text-red transition;
+}
+
+.right-icon {
+  @apply m-4
+}
+
+.error {
+  @apply text-red ml-4 text-sm;
+}

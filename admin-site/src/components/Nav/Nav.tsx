@@ -15,18 +15,24 @@ const Nav: React.FC = () => {
       <Image src="/logo.svg" height={40} width={40} />
 
       <ul className={style.pages}>
-        <li className={pathname === '/' ? style['active-page'] : style.page}>
+        <li>
           <Link href="/">
-            <MdHome size={20} />
+            <div
+              className={pathname === '/' ? style['active-page'] : style.page}
+            >
+              <MdHome size={20} />
+            </div>
           </Link>
         </li>
-        <li
-          className={
-            pathname === '/finance' ? style['active-page'] : style.page
-          }
-        >
+        <li>
           <Link href="/finance">
-            <MdAttachMoney size={20} />
+            <div
+              className={
+                pathname === '/finance' ? style['active-page'] : style.page
+              }
+            >
+              <MdAttachMoney size={20} />
+            </div>
           </Link>
         </li>
       </ul>
