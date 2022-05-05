@@ -1,34 +1,29 @@
 import React, { useMemo, useState } from 'react';
 
-import { IconType } from 'react-icons';
 import { useField } from 'formik';
 
 import classNames from 'classnames';
+import { MdClose, MdError } from 'react-icons/md';
 
 import style from './TextField.module.css';
 
-interface ITextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface ITextFieldProps
+  extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
+  type?: 'input' | 'textarea';
   name: string;
-  icon?: IconType;
+  isRequired?: boolean;
   label: string;
-  right?: {
-    onClick?(): void;
-    icon: IconType;
-  };
   containerClassName?: string;
 }
 
 const TextField: React.FC<ITextFieldProps> = ({
+  type = 'input',
   name,
-  icon: Icon,
+  isRequired,
   label,
-  right,
   containerClassName,
   ...props
 }) => {
-  const { className, onFocus, onBlur, onChange, onClick, onKeyDown, ...rest } =
-    props;
-
   const [fieldProps, meta, helpers] = useField(name);
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState('');
@@ -38,70 +33,91 @@ const TextField: React.FC<ITextFieldProps> = ({
     [meta.error, meta.touched],
   );
 
-  const rootClassName = classNames(
-    style.root,
-    {
-      [style['root-focus']]: isFocused,
-      [style['root-error']]: isErrored,
-    },
-    className,
-  );
-  const labelClassName = classNames(style.label, {
-    [style['label-active']]: isFocused || !!text,
-    [style['label-error']]: isErrored,
-  });
-  const iconClassName = classNames(style.icon, {
-    [style['icon-active']]: isFocused || !!text,
-    [style['icon-error']]: isErrored,
+  const textFieldClassName = classNames(style.label, style['text-field'], {
+    [style['text-field-textarea']]: type === 'textarea',
+    [style['text-field-focus']]: isFocused,
+    [style['text-field-error']]: isErrored,
+    [style['text-field-filled']]: text && !isFocused,
   });
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-      onKeyDown={onKeyDown}
-      className={containerClassName}
-    >
-      <div className={rootClassName}>
-        {Icon && <Icon size={24} className={iconClassName} />}
-        <div className="relative flex flex-1">
-          <label htmlFor={name} className={labelClassName}>
-            {label}
-          </label>
+    <div className={containerClassName}>
+      <div className="flex items-center justify-between">
+        <label htmlFor={name} className="font-medium text-accent-6">
+          {label}
+          {isRequired && <span className="text-red ml-1">*</span>}
+        </label>
+
+        {type === 'textarea' && (
+          <button
+            type="button"
+            className="flex items-center text-xs text-accent-3 hover:text-accent-4 transition"
+            onClick={() => {
+              setText('');
+              helpers.setValue('');
+            }}
+          >
+            <MdClose size={12} />
+            &nbsp;Limpar Campo
+          </button>
+        )}
+      </div>
+
+      <div
+        className="w-full mt-2"
+        style={{ height: type === 'textarea' ? 120 : 40 }}
+      >
+        {type === 'input' && (
           <input
             type="text"
-            name={name}
             id={name}
-            className={style.textfield}
+            className={textFieldClassName}
             onFocus={e => {
               setIsFocused(true);
-              if (onFocus) onFocus(e);
+              if (props.onFocus) props.onFocus(e);
             }}
             onBlur={e => {
               setIsFocused(false);
-              fieldProps.onBlur(name)(e);
-              if (onBlur) onBlur(e);
+              if (props.onBlur) props.onBlur(e);
             }}
             onChange={e => {
               setText(e.target.value);
               fieldProps.onChange(name)(e);
-              if (onChange) onChange(e);
+              if (props.onChange) props.onChange(e);
             }}
             value={text}
-            {...rest}
+            {...props}
           />
-        </div>
-
-        {right && (
-          <right.icon
-            size={24}
-            onClick={right.onClick}
-            className={style['right-icon']}
+        )}
+        {type === 'textarea' && (
+          <textarea
+            id={name}
+            className={textFieldClassName}
+            onFocus={e => {
+              setIsFocused(true);
+              if (props.onFocus) props.onFocus(e);
+            }}
+            onBlur={e => {
+              setIsFocused(false);
+              if (props.onBlur) props.onBlur(e);
+            }}
+            onChange={e => {
+              setText(e.target.value);
+              fieldProps.onChange(name)(e);
+              if (props.onChange) props.onChange(e);
+            }}
+            value={text}
+            {...props}
           />
         )}
       </div>
-      {isErrored && <span className={style.error}>{`* ${meta.error}`}</span>}
+
+      {isErrored && (
+        <span className="flex items-center text-accent-6 text-xs mt-1 ml-2">
+          <MdError className="text-red mr-1" />
+          {meta.error}
+        </span>
+      )}
     </div>
   );
 };

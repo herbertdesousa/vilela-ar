@@ -1,38 +1,22 @@
-.root {
-  @apply flex items-center h-14 bg-accent-1 transition rounded relative pl-4;
-}
-.root-focus {
-  @apply bg-accent-2 transition;
+.text-field {
+  @apply border border-accent-2 transition rounded py-2 px-4 w-full text-accent-6
 }
 
-.textfield {
-  @apply bg-transparent font-medium text-accent-4 w-full;
+.text-field-textarea {
+  height: 120px;
+  @apply resize-none
 }
 
-.label {
-  @apply top-0 text-base absolute transition-all ;
-}
-.label-active {
-  @apply -top-3 text-xs text-primary;
-}
-.label-error {
-  @apply text-red;
+.text-field-focus {
+  box-shadow: 0 0 1px 2px rgba(75, 158, 234, 0.2);
+  @apply border-primary
 }
 
-.icon {
-  @apply text-accent-3 transition m-4 ml-0;
-}
-.icon-active {
-  @apply text-primary transition;
-}
-.icon-error {
-  @apply text-red transition;
+.text-field-filled {
+  @apply border-accent-3
 }
 
-.right-icon {
-  @apply m-4
-}
-
-.error {
-  @apply text-red ml-4 text-sm;
+.text-field-error {
+  box-shadow: 0 0 1px 2px rgba(187, 19, 19, 0.2);
+  @apply border-red
 }

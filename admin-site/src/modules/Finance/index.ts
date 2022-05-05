@@ -1,3 +1,2 @@
-import SideMenu from './SideMenu';
-
-export { SideMenu };
+export { default as SideMenu } from './SideMenu';
+export { default as SaveForm } from './SaveForm';
