@@ -25,7 +25,7 @@ interface IProps {
   className?: string;
   children?: React.ReactNode;
   data: IDropdownDataItem[];
-  onSelect?(value: string): void;
+  onSelect?(value: IDropdownDataItem): void;
 }
 
 const Dropdown: React.ForwardRefRenderFunction<IDropdownRef, IProps> = (
@@ -79,7 +79,7 @@ const Dropdown: React.ForwardRefRenderFunction<IDropdownRef, IProps> = (
             <button
               type="button"
               onClick={() => {
-                onSelect(item.value);
+                onSelect(item);
                 closeDropdown();
               }}
               className="

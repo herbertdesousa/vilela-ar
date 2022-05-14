@@ -37,13 +37,9 @@ const ListItem: React.FC<IListItemProps> = ({
           ${isActive && 'bg-accent-1'}
         `}
         >
-          <div>
-            <strong className="text-accent-6 font-medium text-left">
-              {title}
-            </strong>
-            {description && (
-              <p className="text-accent-3 text-left">{description}</p>
-            )}
+          <div className="text-left">
+            <strong className="text-accent-6 font-medium">{title}</strong>
+            {description && <p className="text-accent-3">{description}</p>}
           </div>
 
           {rightIcon && <rightIcon.icon size={20} className="text-accent-6" />}

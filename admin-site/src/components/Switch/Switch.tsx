@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useField } from 'formik';
 
 import classNames from 'classnames';
-import { MdClose, MdError } from 'react-icons/md';
 
 import style from './Switch.module.css';
 
@@ -13,11 +12,11 @@ interface ISwitchProps {
   data: {
     option1: {
       label: string;
-      value?: string;
+      value: string;
     };
     option2: {
       label: string;
-      value?: string;
+      value: string;
     };
   };
   isRequired?: boolean;
@@ -41,11 +40,20 @@ const Switch: React.FC<ISwitchProps> = ({
     width: 0,
     height: 0,
   });
-  const [switchIndicatorLeft, setSwitchIndicatorLeft] = useState(2);
+
+  const [switchIndicatorLeft, setSwitchIndicatorLeft] = useState(0);
 
   const compareHigher = (a: number, b: number): number => {
     return a > b ? a : b;
   };
+
+  useEffect(() => {
+    setSwitchIndicatorLeft(
+      meta.value === data.option1.value
+        ? 2
+        : 2 + optionButtonMeasures.width + 4,
+    );
+  }, [data.option1.value, meta.value, optionButtonMeasures.width]);
 
   useEffect(() => {
     if (option1ButtonRef.current && option2ButtonRef.current) {
@@ -60,8 +68,7 @@ const Switch: React.FC<ISwitchProps> = ({
     }
   }, []);
 
-  const onChangeValue = (value: string, switchLeft: number) => {
-    setSwitchIndicatorLeft(switchLeft);
+  const onChangeValue = (value: string) => {
     helpers.setValue(value);
   };
 
@@ -107,9 +114,7 @@ const Switch: React.FC<ISwitchProps> = ({
               option1ButtonRef.current?.offsetHeight,
             zIndex: 10,
           }}
-          onClick={() => {
-            onChangeValue(data.option1.value || data.option1.label, 2);
-          }}
+          onClick={() => helpers.setValue(data.option1.value)}
         >
           {data.option1.label}
         </button>
@@ -126,12 +131,7 @@ const Switch: React.FC<ISwitchProps> = ({
               option2ButtonRef.current?.offsetHeight,
             zIndex: 10,
           }}
-          onClick={() => {
-            onChangeValue(
-              data.option2.value || data.option2.label,
-              2 + optionButtonMeasures.width + 4,
-            );
-          }}
+          onClick={() => helpers.setValue(data.option2.value)}
         >
           {data.option2.label}
         </button>

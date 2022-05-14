@@ -4,6 +4,9 @@ import Head from 'next/head';
 import 'tailwindcss/tailwind.css';
 import '../styles/main.css';
 
+import SWRConfig from '@/lib/SWRConfig';
+import Hooks from '@/hook';
+
 const App = ({ Component, pageProps }: any) => (
   <>
     <Head>
@@ -17,7 +20,11 @@ const App = ({ Component, pageProps }: any) => (
       />
     </Head>
 
-    <Component {...pageProps} />
+    <SWRConfig>
+      <Hooks>
+        <Component {...pageProps} />
+      </Hooks>
+    </SWRConfig>
   </>
 );
 

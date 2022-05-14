@@ -1,43 +1,110 @@
 import React from 'react';
 
-import { MdDelete } from 'react-icons/md';
+import { MdChevronLeft, MdDelete } from 'react-icons/md';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { format, addDays } from 'date-fns';
 
-import { Button, Switch, TextField } from '@/components';
+import { useFinance } from '@/hook/finance';
+import { IFinanceItem } from '@/types/IFinanceItem';
 
-const SaveForm: React.FC = () => {
+import moneyFormat from '@/utils/moneyFormat';
+import { Button, DatePicker, Switch, TextField } from '@/components';
+import { ISaveFinance } from '@/hook/finance/types';
+
+interface ISaveFormProps {
+  financeDetails?: IFinanceItem;
+  onCloseSaveForm(): void;
+}
+
+const schemaValidation = Yup.object().shape({
+  value: Yup.string().required('obrigatório'),
+  type: Yup.string().required('obrigatório'),
+  date: Yup.string().required('obrigatório'),
+  description: Yup.string().notRequired(),
+});
+
+const SaveForm: React.FC<ISaveFormProps> = ({
+  onCloseSaveForm,
+  financeDetails,
+}) => {
+  const { addFinance, editFinance, deleteFinance } = useFinance();
+
+  const onSubmit = (data: ISaveFinance) => {
+    try {
+      const parsedData = {
+        ...data,
+        date: `${format(new Date(data.date), 'yyyy-MM-dd')}`,
+        value: data.value
+          .replace('R$', '')
+          .replace(/\./g, '')
+          .replace(',', '.'),
+      };
+      if (financeDetails) {
+        editFinance(parsedData, financeDetails?.id);
+      } else {
+        addFinance(parsedData);
+      }
+      onCloseSaveForm();
+    } catch (err) {
+      console.log(err.response.data);
+    }
+  };
+
   return (
-    <div className="pt-20 pl-16" style={{ width: 512 }}>
+    <div className="pt-16 pl-16" style={{ width: 512 }}>
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-merriweather text-accent-6 font-bold">
-          Atualizar
-        </h1>
+        <div className="flex items-center">
+          <button
+            type="button"
+            className="mr-4 text-accent-4"
+            onClick={onCloseSaveForm}
+          >
+            <MdChevronLeft size={24} />
+          </button>
+          <h1 className="text-4xl font-merriweather text-accent-6 font-bold">
+            {financeDetails ? 'Atualizar' : 'Adicionar'}
+          </h1>
+        </div>
 
-        <button
-          type="button"
-          className="flex items-center text-accent-6 font-medium"
-        >
-          <MdDelete size={20} className="mr-1 text-red" />
-          Deletar
-        </button>
+        {financeDetails && (
+          <button
+            type="button"
+            className="flex items-center text-accent-6 font-medium"
+            onClick={() => {
+              deleteFinance(financeDetails.id);
+              onCloseSaveForm();
+            }}
+          >
+            <MdDelete size={20} className="mr-1 text-red" />
+            Deletar
+          </button>
+        )}
       </div>
 
       <div className="mt-12">
         <Formik
+          enableReinitialize
           initialValues={{
-            date: '',
-            type: 'income',
-            description: '',
-            value: '',
+            date: financeDetails?.date
+              ? addDays(new Date(financeDetails.date), 1)
+              : '',
+            type: financeDetails?.type || 'INCOME',
+            description: financeDetails?.description || '',
+            value: financeDetails?.value
+              ? moneyFormat(financeDetails?.value)
+              : '',
           }}
-          onSubmit={dt => console.log(dt)}
+          validationSchema={schemaValidation}
+          onSubmit={onSubmit}
         >
-          {({ submitForm }) => (
+          {({ submitForm, errors }) => (
             <>
               <TextField
                 name="value"
                 label="Valor (R$)"
                 isRequired
+                formatOnChangeText={moneyFormat}
                 placeholder="Valor"
               />
               <Switch
@@ -46,17 +113,17 @@ const SaveForm: React.FC = () => {
                 isRequired
                 containerClassName="mt-4"
                 data={{
-                  option1: { label: 'Entrada', value: 'income' },
-                  option2: { label: 'Saída', value: 'outcome' },
+                  option1: { label: 'Entrada', value: 'INCOME' },
+                  option2: { label: 'Saída', value: 'OUTCOME' },
                 }}
               />
-              <TextField
+              <DatePicker
                 name="date"
                 label="Data"
-                containerClassName="mt-4"
                 isRequired
-                placeholder="Descrição da Financia"
+                className="mt-4"
               />
+
               <TextField
                 name="description"
                 type="textarea"
@@ -65,7 +132,7 @@ const SaveForm: React.FC = () => {
                 placeholder="Descrição da Financia"
               />
               <Button className="w-full mt-8" onClick={submitForm}>
-                Editar Finância
+                {financeDetails ? 'Atualizar Financia' : 'Adicionar Financia'}
               </Button>
             </>
           )}

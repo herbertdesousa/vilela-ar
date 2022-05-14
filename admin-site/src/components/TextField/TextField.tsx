@@ -13,6 +13,7 @@ interface ITextFieldProps
   name: string;
   isRequired?: boolean;
   label: string;
+  formatOnChangeText?: (text: string) => string;
   containerClassName?: string;
 }
 
@@ -21,12 +22,12 @@ const TextField: React.FC<ITextFieldProps> = ({
   name,
   isRequired,
   label,
+  formatOnChangeText,
   containerClassName,
   ...props
 }) => {
   const [fieldProps, meta, helpers] = useField(name);
   const [isFocused, setIsFocused] = useState(false);
-  const [text, setText] = useState('');
 
   const isErrored = useMemo(
     (): boolean => meta.touched && !!meta.error,
@@ -37,7 +38,7 @@ const TextField: React.FC<ITextFieldProps> = ({
     [style['text-field-textarea']]: type === 'textarea',
     [style['text-field-focus']]: isFocused,
     [style['text-field-error']]: isErrored,
-    [style['text-field-filled']]: text && !isFocused,
+    [style['text-field-filled']]: meta.value && !isFocused,
   });
 
   return (
@@ -52,10 +53,7 @@ const TextField: React.FC<ITextFieldProps> = ({
           <button
             type="button"
             className="flex items-center text-xs text-accent-3 hover:text-accent-4 transition"
-            onClick={() => {
-              setText('');
-              helpers.setValue('');
-            }}
+            onClick={() => helpers.setValue('')}
           >
             <MdClose size={12} />
             &nbsp;Limpar Campo
@@ -81,11 +79,20 @@ const TextField: React.FC<ITextFieldProps> = ({
               if (props.onBlur) props.onBlur(e);
             }}
             onChange={e => {
-              setText(e.target.value);
-              fieldProps.onChange(name)(e);
-              if (props.onChange) props.onChange(e);
+              const evt: React.ChangeEvent<HTMLInputElement> = {
+                ...e,
+                target: {
+                  ...e.target,
+                  value: formatOnChangeText
+                    ? formatOnChangeText(e.target.value)
+                    : e.target.value,
+                },
+              };
+
+              fieldProps.onChange(name)(evt);
+              if (props.onChange) props.onChange(evt);
             }}
-            value={text}
+            value={meta.value}
             {...props}
           />
         )}
@@ -102,11 +109,10 @@ const TextField: React.FC<ITextFieldProps> = ({
               if (props.onBlur) props.onBlur(e);
             }}
             onChange={e => {
-              setText(e.target.value);
               fieldProps.onChange(name)(e);
               if (props.onChange) props.onChange(e);
             }}
-            value={text}
+            value={meta.value}
             {...props}
           />
         )}

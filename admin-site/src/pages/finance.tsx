@@ -1,21 +1,44 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 
-import { MdKeyboardArrowDown } from 'react-icons/md';
-
-import { IDropdownRef } from '@/components/Dropdown';
-import { Button, Dropdown, Nav } from '@/components';
+import { Nav } from '@/components';
 import { SideMenu, SaveForm } from '@/modules/Finance';
 
-const Finance: React.FC = () => {
-  return (
-    <div className="flex max-h-screen">
-      <Nav />
+import { IFinanceItem } from '@/types/IFinanceItem';
 
-      <div className="flex">
-        <SideMenu />
-        <SaveForm />
+const Finance: React.FC = () => {
+  const [financeDetails, setFinanceDetails] = useState<
+    IFinanceItem | undefined
+  >();
+  const [isSaveFormShowing, setIsSaveFormShowing] = useState(false);
+
+  return (
+    <>
+      <div />
+
+      <div className="flex max-h-screen">
+        <Nav />
+
+        <div className="flex">
+          <SideMenu
+            onClickAddFinance={() => {
+              setIsSaveFormShowing(true);
+              setFinanceDetails(undefined);
+            }}
+            onClickEditFinance={data => {
+              setIsSaveFormShowing(true);
+              setFinanceDetails(data);
+            }}
+            onCloseSaveForm={() => setIsSaveFormShowing(false)}
+          />
+          {isSaveFormShowing && (
+            <SaveForm
+              financeDetails={financeDetails}
+              onCloseSaveForm={() => setIsSaveFormShowing(false)}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

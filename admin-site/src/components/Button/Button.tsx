@@ -39,6 +39,9 @@ const Button: React.FC<IButtonProps> = ({
       onClick={e => {
         if (!loading && onClick) onClick(e);
       }}
+      style={{
+        justifyContent: RightIcon || LeftIcon ? 'space-between' : 'center',
+      }}
       {...rest}
     >
       {LeftIcon && <LeftIcon className="mr-2" />}

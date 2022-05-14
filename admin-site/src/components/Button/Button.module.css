@@ -1,5 +1,5 @@
 .root {
-  @apply flex items-center justify-center rounded transition-all font-medium whitespace-nowrap;
+  @apply flex items-center rounded transition-all font-medium whitespace-nowrap;
 }
 
 .variant-primary {

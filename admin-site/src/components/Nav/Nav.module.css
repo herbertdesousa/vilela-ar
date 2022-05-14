@@ -7,7 +7,7 @@
 }
 
 .page {
-  @apply w-16 h-16 flex items-center justify-center text-accent-6 cursor-pointer
+  @apply w-16 h-16 flex items-center justify-center text-accent-4 cursor-pointer hover:text-accent-6 transition
 }
 
 .active-page {
