@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Nav } from '@/components';
-import { SideMenu, SaveForm } from '@/modules/Finance';
+import { FinanceSideMenu, FinanceSaveForm } from '@/modules/Finance';
 
 import { IFinanceItem } from '@/types/IFinanceItem';
 
@@ -19,7 +19,7 @@ const Finance: React.FC = () => {
         <Nav />
 
         <div className="flex">
-          <SideMenu
+          <FinanceSideMenu
             onClickAddFinance={() => {
               setIsSaveFormShowing(true);
               setFinanceDetails(undefined);
@@ -31,7 +31,7 @@ const Finance: React.FC = () => {
             onCloseSaveForm={() => setIsSaveFormShowing(false)}
           />
           {isSaveFormShowing && (
-            <SaveForm
+            <FinanceSaveForm
               financeDetails={financeDetails}
               onCloseSaveForm={() => setIsSaveFormShowing(false)}
             />

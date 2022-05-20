@@ -18,6 +18,8 @@ interface IProps {
   className?: string;
   buttonClassName?: string;
 
+  isRequired?: boolean;
+  placeholder?: string;
   name: string;
   data: IItem[];
   label: string;
@@ -28,7 +30,9 @@ const Select: React.FC<IProps> = ({
   name,
   className,
   buttonClassName,
+  isRequired,
   label,
+  placeholder,
   data,
   onSelect,
 }) => {
@@ -38,14 +42,19 @@ const Select: React.FC<IProps> = ({
 
   return (
     <div className={classNames('relative', className)}>
+      <label htmlFor={name} className="font-medium text-accent-6">
+        {label}
+        {isRequired && <span className="text-red ml-1">*</span>}
+      </label>
+
       <Button
         onClick={() => dropdownRef.current.toggle()}
         variant="outline"
-        className={buttonClassName}
+        className={classNames('w-full mt-2 h-10', buttonClassName)}
         size="sm"
         rightIcon={MdKeyboardArrowDown}
       >
-        {label}
+        <span className="text-accent-3 font-normal">{placeholder}</span>
       </Button>
       <Dropdown
         ref={dropdownRef}

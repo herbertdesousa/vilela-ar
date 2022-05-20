@@ -3,9 +3,24 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { MdAttachMoney, MdHome } from 'react-icons/md';
+import { MdAttachMoney, MdHome, MdDescription } from 'react-icons/md';
 
 import style from './Nav.module.css';
+
+const pages = [
+  {
+    href: '/',
+    Icon: MdHome,
+  },
+  {
+    href: '/finance',
+    Icon: MdAttachMoney,
+  },
+  {
+    href: '/documents',
+    Icon: MdDescription,
+  },
+];
 
 const Nav: React.FC = () => {
   const { push, pathname } = useRouter();
@@ -15,26 +30,19 @@ const Nav: React.FC = () => {
       <Image src="/logo.svg" height={40} width={40} />
 
       <ul className={style.pages}>
-        <li>
-          <Link href="/">
-            <div
-              className={pathname === '/' ? style['active-page'] : style.page}
-            >
-              <MdHome size={20} />
-            </div>
-          </Link>
-        </li>
-        <li>
-          <Link href="/finance">
-            <div
-              className={
-                pathname === '/finance' ? style['active-page'] : style.page
-              }
-            >
-              <MdAttachMoney size={20} />
-            </div>
-          </Link>
-        </li>
+        {pages.map(({ href, Icon }) => (
+          <li key={href}>
+            <Link href={href}>
+              <div
+                className={
+                  pathname === href ? style['active-page'] : style.page
+                }
+              >
+                <Icon size={20} />
+              </div>
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );

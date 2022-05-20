@@ -1,2 +1,2 @@
-export { default as SideMenu } from './SideMenu';
-export { default as SaveForm } from './SaveForm';
+export { default as FinanceSideMenu } from './FinanceSideMenu';
+export { default as FinanceSaveForm } from './FinanceSaveForm';

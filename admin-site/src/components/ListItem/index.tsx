@@ -1,56 +1,79 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 import classNames from 'classnames';
 
 import { IconType } from 'react-icons';
+import Dropdown, { IDropdownProps, IDropdownRef } from '../Dropdown';
 
 export interface IListItemProps {
   title: React.ReactNode | string;
   description?: React.ReactNode | string;
-  rightIcon?: {
+  rightComponent?: {
     icon: IconType;
     onClick?: () => void;
+    dropdown?: IDropdownProps;
   };
   showBottomIndicator?: boolean;
   isActive?: boolean;
   onClick?: () => void;
   className?: string;
+  buttonClassName?: string;
 }
 
 const ListItem: React.FC<IListItemProps> = ({
   title,
   onClick,
   description,
-  rightIcon,
+  rightComponent,
   isActive,
   showBottomIndicator,
+  buttonClassName,
   className,
 }) => {
+  const dropdownRef = useRef<IDropdownRef>(null);
+
   return (
     <>
-      <li className={classNames('w-full', className)}>
+      <li
+        className={classNames(
+          'flex justify-between items-center w-full relative',
+          className,
+        )}
+      >
         <button
           type="button"
           onClick={onClick}
-          className={`
-          flex justify-between items-center px-6 py-0.5 h-14 hover:bg-accent-1 transition w-full
-          ${isActive && 'bg-accent-1'}
+          className={`py-0.5 h-14 w-full
+          ${isActive && 'bg-accent-1'} ${buttonClassName}
         `}
         >
           <div className="text-left">
             <strong className="text-accent-6 font-medium">{title}</strong>
             {description && <p className="text-accent-3">{description}</p>}
           </div>
-
-          {rightIcon && <rightIcon.icon size={20} className="text-accent-6" />}
         </button>
+        {rightComponent && (
+          <button
+            type="button"
+            onClick={() => {
+              if (rightComponent?.onClick) rightComponent.onClick();
+              if (rightComponent?.dropdown) dropdownRef?.current.toggle();
+            }}
+          >
+            {rightComponent?.dropdown && (
+              <Dropdown
+                ref={dropdownRef}
+                containerStyle={{ width: 152, right: 12, top: 24 }}
+                {...rightComponent.dropdown}
+              />
+            )}
+            <rightComponent.icon size={20} className="text-accent-6" />
+          </button>
+        )}
       </li>
 
       {showBottomIndicator && (
-        <div
-          style={{ width: 'calc(100% - 80px)', height: 1 }}
-          className="ml-10 bg-accent-2 mt-2"
-        />
+        <div style={{ height: 1 }} className="bg-accent-2 mt-2 w-full" />
       )}
     </>
   );

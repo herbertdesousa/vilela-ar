@@ -68,7 +68,8 @@ export const FinanceProvider: React.FC = ({ children }) => {
 
   const { data, mutate } = useSWR<IFinanceItem[]>(
     // eslint-disable-next-line prettier/prettier
-    `${resources.finances}?date=${filterDataYear.find(i => i.isActive).value}-${filterDataMonths.find(i => i.isActive).value}-${filterDataDays.find(i => i.isActive).value}${filterFinanceType !== 'ALL' ? `&type=${filterFinanceType}` : ''}`,
+    // `${resources.finances}?date=${filterDataYear.find(i => i.isActive).value}-${filterDataMonths.find(i => i.isActive).value}-${filterDataDays.find(i => i.isActive).value}${filterFinanceType !== 'ALL' ? `&type=${filterFinanceType}` : ''}`,
+    undefined,
   );
 
   const addFinance = useCallback(

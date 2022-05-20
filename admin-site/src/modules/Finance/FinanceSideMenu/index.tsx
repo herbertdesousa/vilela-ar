@@ -15,7 +15,7 @@ interface ISideMenu {
   onCloseSaveForm(): void;
 }
 
-const SideMenu: React.FC<ISideMenu> = ({
+const FinanceSideMenu: React.FC<ISideMenu> = ({
   onClickAddFinance,
   onClickEditFinance,
   onCloseSaveForm,
@@ -239,7 +239,7 @@ const SideMenu: React.FC<ISideMenu> = ({
             )}`}
             description={item.description || ''}
             key={item.id}
-            rightIcon={{
+            rightComponent={{
               icon: MdChevronRight,
             }}
             onClick={() => onClickEditFinance(item)}
@@ -252,4 +252,4 @@ const SideMenu: React.FC<ISideMenu> = ({
   );
 };
 
-export default SideMenu;
+export default FinanceSideMenu;

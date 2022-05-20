@@ -2,6 +2,10 @@
   @apply border border-accent-2 transition rounded py-2 px-4 w-full text-accent-6
 }
 
+.text-field:disabled {
+  @apply bg-accent-1 border-accent-2
+}
+
 .text-field-textarea {
   height: 120px;
   @apply resize-none

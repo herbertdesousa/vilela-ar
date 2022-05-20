@@ -24,7 +24,7 @@ const schemaValidation = Yup.object().shape({
   description: Yup.string().notRequired(),
 });
 
-const SaveForm: React.FC<ISaveFormProps> = ({
+const FinanceSaveForm: React.FC<ISaveFormProps> = ({
   onCloseSaveForm,
   financeDetails,
 }) => {
@@ -142,4 +142,4 @@ const SaveForm: React.FC<ISaveFormProps> = ({
   );
 };
 
-export default SaveForm;
+export default FinanceSaveForm;

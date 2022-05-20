@@ -19,17 +19,22 @@ export interface IDropdownRef {
 export interface IDropdownDataItem {
   value: string;
   item: React.ReactNode;
+  onSelect?(): void;
+  disabled?: boolean;
 }
 
-interface IProps {
+export interface IDropdownProps {
   className?: string;
-  children?: React.ReactNode;
+  // children?: React.ReactNode;
   data: IDropdownDataItem[];
+  containerStyle?: React.CSSProperties;
   onSelect?(value: IDropdownDataItem): void;
+  onOpen?(): void;
+  onClose?(): void;
 }
 
-const Dropdown: React.ForwardRefRenderFunction<IDropdownRef, IProps> = (
-  { className, children, data, onSelect },
+const Dropdown: React.ForwardRefRenderFunction<IDropdownRef, IDropdownProps> = (
+  { className, data, onSelect, onOpen, onClose, containerStyle },
   ref,
 ) => {
   const [isOpened, setIsOpened] = useState(false);
@@ -56,12 +61,14 @@ const Dropdown: React.ForwardRefRenderFunction<IDropdownRef, IProps> = (
   }));
 
   const closeDropdown = useCallback(() => {
+    if (onClose) onClose();
     setIsOpened(false);
-  }, []);
+  }, [onClose]);
   const openDropdown = useCallback(() => {
+    if (onOpen) onOpen();
     setIsVisible(true);
     setTimeout(() => setIsOpened(true), 50);
-  }, []);
+  }, [onOpen]);
   const onClickOutsideRef = useDetectClickOutside({
     onTriggered: closeDropdown,
   });
@@ -71,6 +78,7 @@ const Dropdown: React.ForwardRefRenderFunction<IDropdownRef, IProps> = (
     <div
       ref={onClickOutsideRef}
       className={rootClassName}
+      style={containerStyle}
       onTransitionEnd={() => setIsVisible(isOpened)}
     >
       <ul className="py-1 max-w-full">
@@ -79,12 +87,15 @@ const Dropdown: React.ForwardRefRenderFunction<IDropdownRef, IProps> = (
             <button
               type="button"
               onClick={() => {
-                onSelect(item);
+                if (onSelect) onSelect(item);
+                if (item.onSelect) item.onSelect();
                 closeDropdown();
               }}
-              className="
-                py-2 pl-2 font-medium hover:bg-accent-1 cursor-pointer w-full flex items-start
-              "
+              disabled={item?.disabled || false}
+              className={`
+                py-2 pl-2 cursor-pointer w-full flex items-start text-left
+                ${item?.disabled ? '' : 'hover:bg-accent-1'}
+              `}
             >
               {item.item}
             </button>
