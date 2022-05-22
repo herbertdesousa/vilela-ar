@@ -6,20 +6,22 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 
 import { useField } from 'formik';
 import Button from '../Button';
-import Dropdown, { IDropdownRef, IDropdownDataItem } from '../Dropdown';
+import Dropdown, { IDropdownRef } from '../Dropdown';
 
 interface IItem {
   value: string;
-  label?: string;
+  label?: React.ReactNode;
   isActive?: boolean;
 }
 
 interface IProps {
   className?: string;
   buttonClassName?: string;
+  dropdownStyle?: React.CSSProperties;
 
   isRequired?: boolean;
   placeholder?: string;
+  value?: string;
   name: string;
   data: IItem[];
   label: string;
@@ -29,8 +31,10 @@ interface IProps {
 const Select: React.FC<IProps> = ({
   name,
   className,
+  dropdownStyle,
   buttonClassName,
   isRequired,
+  value,
   label,
   placeholder,
   data,
@@ -54,10 +58,12 @@ const Select: React.FC<IProps> = ({
         size="sm"
         rightIcon={MdKeyboardArrowDown}
       >
+        {value}
         <span className="text-accent-3 font-normal">{placeholder}</span>
       </Button>
       <Dropdown
         ref={dropdownRef}
+        containerStyle={dropdownStyle}
         data={data.map(item => ({
           value: item.value,
           item: (

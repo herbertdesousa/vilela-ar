@@ -30,7 +30,7 @@ const DocumentEditorSideMenuGeneral: React.FC = () => {
         />
         <Checkbox
           name={`layers[${layers.value.length - 1}].sum_all_prices`}
-          label="Adicionar Página de Dados Bancários"
+          label="Somar todos os preços"
           containerClassName="mt-4"
         />
       </div>

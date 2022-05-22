@@ -7,7 +7,7 @@
 }
 
 .variant-outline {
-  @apply border border-accent-2 hover:bg-accent-1 text-accent-6
+  @apply border border-accent-2 hover:bg-accent-1 text-accent-6 bg-accent-0
 }
 
 .size-normal {

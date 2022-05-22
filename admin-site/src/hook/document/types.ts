@@ -1,10 +1,42 @@
 import {
   IDocumentFormDataLayers,
+  IDocumentFormDataLayersBlock,
+  IDocumentFormDataLayersPayment,
   IDocumentFormDataLayersBlockPlace,
   IDocumentFormDataLayersBlockPlaceDevice,
+  IDocumentFormDataType,
 } from './types/DocumentFormData';
 
+type IBlocksInPageItemVariants =
+  | IDocumentFormDataLayersBlock
+  | IDocumentFormDataLayersPayment;
+export type IBlocksInPageItem = IBlocksInPageItemVariants & {
+  height: number;
+  width: number;
+};
+
+export interface IDocumentPayload {
+  layers?: {
+    onDeleteLayer(id: string): void;
+  };
+}
+
+export interface IPreviewPages {
+  label: string;
+  isActive: boolean;
+}
+
 export interface IDocumentContextData {
+  previewPages: {
+    value: IPreviewPages[];
+    activeIndex: number;
+    changePage(page: number): void;
+  };
+  blocksInPage: IBlocksInPageItem[][];
+  saveBlockInPageMeasures: (payload: IBlocksInPageItem) => void;
+
+  type: IDocumentFormDataType;
+  add_bank_details_page: boolean;
   layers: {
     value: IDocumentFormDataLayers[];
     moveUp: (index: number) => void;
