@@ -274,7 +274,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
                     capacity: '',
                     mode: '',
                     quantity: 1,
-                    type: 'ar condicionado',
+                    type: 'Ar Condicionado',
                   },
                 ],
               };
@@ -314,58 +314,103 @@ export const DocumentProvider: React.FC = ({ children }) => {
     }, []);
   }, [layers]);
 
-  const [previewActivePageIndex, setPreviewActivePageIndex] = useState(0);
+  const [previewPages, setPreviewPages] = useState<IPreviewPages[]>([
+    {
+      label: 'Página 1',
+      isActive: true,
+      order: 1,
+    },
+  ]);
 
-  const saveBlockInPageMeasures = useCallback(
-    (payload: IBlocksInPageItem) => {
-      setBlocksInPage(st => {
-        const pageHeight = 400;
-        if (st.find(page => page.find(block => block.id === payload.id))) {
-          const updated = st.map(page =>
-            page.map(block =>
-              block.id === payload.id
-                ? {
-                    ...payload,
-                    height: payload.height || block.height,
-                    width: payload.width || block.width,
-                  }
-                : block,
-            ),
-          );
+  useEffect(() => {
+    if (add_bank_details_page) {
+      setPreviewPages(st => [
+        ...st,
+        { label: 'Dados Bancários', isActive: false, order: 100000 },
+      ]);
+    } else {
+      setPreviewPages(st =>
+        st
+          .filter(i => i.label !== 'Dados Bancários')
+          .map((y, idx) => ({
+            ...y,
+            isActive: idx === 0,
+          })),
+      );
+    }
+  }, [add_bank_details_page]);
 
-          const updatedBlocks = order(updated.flat(), pageHeight);
-
-          if (previewActivePageIndex + 1 > updatedBlocks.length)
-            setPreviewActivePageIndex(0);
-
-          return updatedBlocks;
+  const saveBlockInPageMeasures = useCallback((payload: IBlocksInPageItem) => {
+    const savePreviewPages = (updatedBlocks: IBlocksInPageItem[][]) => {
+      setPreviewPages(pages => {
+        // if (pages.find(i => i.isActive).label === 'Dados Bancários')
+        //   return pages;
+        if (pages.findIndex(i => i.isActive) + 1 > updatedBlocks.length) {
+          return pages.map((y, idx) => ({
+            ...y,
+            isActive: idx === 0,
+          }));
         }
+        return [
+          ...Array(updatedBlocks.length)
+            .fill('')
+            .map((y, idx) => ({
+              label: `Página ${idx + 1}`,
+              isActive:
+                pages.find(i => i.label === `Página ${idx + 1}`)?.isActive ||
+                false,
+              order: idx,
+            })),
+          pages.find(i => i.label === 'Dados Bancários'),
+        ].filter(i => typeof i !== 'undefined');
+      });
+    };
+
+    setBlocksInPage(st => {
+      const pageHeight = 400;
+      if (st.find(page => page.find(block => block.id === payload.id))) {
+        const updated = st.map(page =>
+          page.map(block =>
+            block.id === payload.id
+              ? {
+                  ...payload,
+                  height: payload.height || block.height,
+                  width: payload.width || block.width,
+                }
+              : block,
+          ),
+        );
 
         const updatedBlocks = order(
-          [...st.flat().map(i => ({ ...i, height: i.height || 95 })), payload],
+          updated.flat().sort((a: any, b: any) => a.order - b.order),
           pageHeight,
         );
-        if (previewActivePageIndex + 1 > updatedBlocks.length)
-          setPreviewActivePageIndex(0);
+
+        savePreviewPages(updatedBlocks);
+
         return updatedBlocks;
-      });
-    },
-    [previewActivePageIndex],
-  );
+      }
+
+      // console.log(st.flat().sort((a: any, b: any) => a.order - b.order));
+      const updatedBlocks = order(
+        [
+          ...st.flat().map(i => ({ ...i, height: i.height || 95 })),
+          { ...payload, height: payload.height || 95 },
+        ].sort((a: any, b: any) => a.order - b.order),
+        pageHeight,
+      );
+
+      savePreviewPages(updatedBlocks);
+
+      return updatedBlocks;
+    });
+  }, []);
 
   const removeBlockInPageMeasures = useCallback((id: string) => {
     setBlocksInPage(st => {
       return st.map(page => page.filter(block => block.id !== id));
     });
   }, []);
-
-  // useEffect(() => {
-  //   setPreviewActivePageIndex(
-  //     blocksInPage.length - 1 > previewActivePageIndex
-  //       ? previewActivePageIndex
-  //       : 0,
-  //   );
-  // }, [blocksInPage.length, previewActivePageIndex]);
 
   // const changePreviewPage = (page: IPreviewPages) => {
   //   setPreviewPages(st =>
@@ -382,14 +427,17 @@ export const DocumentProvider: React.FC = ({ children }) => {
     <DocumentContext.Provider
       value={{
         previewPages: {
-          value: Array(blocksInPage.length)
-            .fill('')
-            .map((x, idx) => ({
-              label: `Página ${idx + 1}`,
-              isActive: idx === previewActivePageIndex,
-            })),
-          activeIndex: previewActivePageIndex,
-          changePage: setPreviewActivePageIndex,
+          value: previewPages,
+          activeIndex: previewPages.findIndex(i => i.isActive),
+          activeName: previewPages.find(i => i.isActive).label,
+          changePage: pageName => {
+            setPreviewPages(st =>
+              st.map(page => ({
+                ...page,
+                isActive: page.label === pageName,
+              })),
+            );
+          },
         },
         blocksInPage,
         saveBlockInPageMeasures,

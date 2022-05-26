@@ -196,8 +196,10 @@ const DocumentEditorPreviewerBlocks: React.FC<
           <strong className="mr-1 mt-3">Mateirias:</strong>
           <p className="mt-3">
             {block.materials.map((material, index) => (
-              // eslint-disable-next-line prettier/prettier
-              <>{`${material}${block.materials.length - 1 !== index ? ', ': ''}`}</>
+              <span key={material}>
+                {/* eslint-disable-next-line prettier/prettier */}
+                {`${material}${block.materials.length - 1 !== index ? ', ': ''}`}
+              </span>
             ))}
           </p>
         </div>

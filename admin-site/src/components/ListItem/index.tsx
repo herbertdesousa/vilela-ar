@@ -53,13 +53,16 @@ const ListItem: React.FC<IListItemProps> = ({
           </div>
         </button>
         {rightComponent && (
-          <button
-            type="button"
-            onClick={() => {
-              if (rightComponent?.onClick) rightComponent.onClick();
-              if (rightComponent?.dropdown) dropdownRef?.current.toggle();
-            }}
-          >
+          <>
+            <button
+              type="button"
+              onClick={() => {
+                if (rightComponent?.onClick) rightComponent.onClick();
+                if (rightComponent?.dropdown) dropdownRef?.current.toggle();
+              }}
+            >
+              <rightComponent.icon size={20} className="text-accent-6" />
+            </button>
             {rightComponent?.dropdown && (
               <Dropdown
                 ref={dropdownRef}
@@ -67,8 +70,7 @@ const ListItem: React.FC<IListItemProps> = ({
                 {...rightComponent.dropdown}
               />
             )}
-            <rightComponent.icon size={20} className="text-accent-6" />
-          </button>
+          </>
         )}
       </li>
 

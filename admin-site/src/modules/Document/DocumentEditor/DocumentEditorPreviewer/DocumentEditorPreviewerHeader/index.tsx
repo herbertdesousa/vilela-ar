@@ -40,6 +40,29 @@ const DocumentEditorPreviewerHeader: React.FC<
     router.push('/documents/editor/header');
   };
 
+  const addressText = useMemo((): string => {
+    if (!Object.values(header.address).find(value => value)) return '-';
+
+    const {
+      street,
+      number,
+      complement,
+      neighborhood,
+      city,
+      state,
+      postalCode,
+    } = header.address;
+
+    const cityStateDash = city && state ? '-' : '';
+    const streetComma = street && !number && !complement ? ',' : '';
+    const numberComma = number && !complement ? ',' : '';
+    const complementComma = complement ? ',' : '';
+    const neighborhoodComma = neighborhood ? ',' : '';
+
+    // Rua Cabo Oscar Rossini 808 a, Parque Novo Mundo, São Paulo - SP - CEP 02186030
+    return `${street}${streetComma} ${number}${numberComma} ${complement}${complementComma} ${neighborhood}${neighborhoodComma} ${city} ${cityStateDash} ${state} ${postalCode}`;
+  }, [header.address]);
+
   if (documentType === 'small') {
     return (
       <div
@@ -95,7 +118,7 @@ const DocumentEditorPreviewerHeader: React.FC<
           </div>
           <div className="flex flex-col text-xs mt-2">
             <strong>Endereço:</strong>
-            <span>{header.customer.address.street || '-'}</span>
+            <span>{addressText}</span>
           </div>
         </div>
       </div>

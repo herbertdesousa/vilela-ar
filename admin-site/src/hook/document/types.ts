@@ -24,13 +24,15 @@ export interface IDocumentPayload {
 export interface IPreviewPages {
   label: string;
   isActive: boolean;
+  order: number;
 }
 
 export interface IDocumentContextData {
   previewPages: {
     value: IPreviewPages[];
     activeIndex: number;
-    changePage(page: number): void;
+    activeName: string;
+    changePage(pageName: string): void;
   };
   blocksInPage: IBlocksInPageItem[][];
   saveBlockInPageMeasures: (payload: IBlocksInPageItem) => void;

@@ -32,10 +32,10 @@ const DocumentEditorPreviewerPayment: React.FC<
 
   const priceTotal = useMemo(() => {
     const prices = blocks
-      .filter(b => b.price.value && b.price.sum_price_in_payment)
-      .map(i => Number(onlyNumbersFormat(i.price.value)));
+      .filter(b => b.price)
+      .map(i => Number(onlyNumbersFormat(i.price)));
 
-    return moneyFormat(prices.reduce((a, b) => a + b, 0));
+    return moneyFormat(prices.reduce((a, b) => a + b, 0)) || 'R$0,00';
   }, [blocks]);
 
   const isOnPaymentPage = useMemo((): boolean => {
@@ -59,17 +59,12 @@ const DocumentEditorPreviewerPayment: React.FC<
   return (
     <div
       ref={containerMeasuresRef.ref}
-      className="w-full flex justify-end mt-20"
+      className="absolute bottom-6 right-10 w-full flex justify-end"
     >
       <div
         role="button"
         tabIndex={0}
         style={{
-          display: !blocks.find(
-            b => b.price.value && b.price.sum_price_in_payment,
-          )
-            ? 'none'
-            : 'block',
           width: 242,
           outline: isOnPaymentPage ? '3px solid #A3CCF3' : 0,
         }}
@@ -79,24 +74,21 @@ const DocumentEditorPreviewerPayment: React.FC<
       >
         {isOnPaymentPage && <DocumentEditorPreviewerFocusIndicator />}
         <ul>
-          {blocks.map((b, index) =>
-            b.price.value && b.price.sum_price_in_payment ? (
+          {blocks
+            .filter(i => i.price)
+            .map((b, index) => (
               <div
+                key={b.id}
                 className={`flex justify-between ${index !== 0 ? 'mt-1' : ''}`}
               >
                 <span>{b.title}</span>
-                <span>{b.price.value}</span>
+                <span>{b.price}</span>
               </div>
-            ) : (
-              <></>
-            ),
-          )}
-          {priceTotal && payment.sum_all_prices && (
-            <div className="flex justify-between mt-2">
-              <span>Total</span>
-              <strong>{priceTotal}</strong>
-            </div>
-          )}
+            ))}
+          <div className="flex justify-between mt-2">
+            <span>Total</span>
+            <strong>{priceTotal}</strong>
+          </div>
         </ul>
         <p className="mt-4 text-accent-4">{payment.comments}</p>
       </div>

@@ -21,6 +21,7 @@ import {
 import { IDropdownRef } from '@/components/Dropdown';
 import moneyFormat from '@/utils/moneyFormat';
 import romanFormat from '@/utils/romanFormat';
+import { api } from '@/services/api';
 
 const DocumentEditorSideMenuBlock: React.FC = () => {
   const router = useRouter();
@@ -92,11 +93,29 @@ const DocumentEditorSideMenuBlock: React.FC = () => {
         </div>
       </div>
 
-      <TextField
+      <Select
         name={`layers[${blockIndex}].title`}
         label="Nome"
         isRequired
         placeholder="Nome do bloco"
+        data={{
+          variant: 'single',
+          fetch: async () => {
+            const response = await api.get<{ name: string }[]>(
+              `http://${process.browser && window.location.host}/api/documents`,
+              { params: { type: 'block-name' } },
+            );
+
+            return response.data.map(i => ({ value: i.name }));
+          },
+          onAddFilter: async name => {
+            await api.post(
+              `http://${process.browser && window.location.host}/api/documents`,
+              { name },
+              { params: { type: 'block-name' } },
+            );
+          },
+        }}
       />
       <TextField
         name={`layers[${blockIndex}].description`}
@@ -105,26 +124,41 @@ const DocumentEditorSideMenuBlock: React.FC = () => {
         placeholder="Descrição"
         containerClassName="mt-4"
       />
-      <ClosableList title="Preço" containerClassName="mt-8">
-        <TextField
-          name={`layers[${blockIndex}].price.value`}
-          label="Valor (R$)"
-          isRequired
-          formatOnChangeText={moneyFormat}
-          placeholder="Valor para este bloco"
-        />
-        <Checkbox
-          name={`layers[${blockIndex}].price.sum_price_in_payment`}
-          label="Somar preço no total"
-          containerClassName="mt-4"
-        />
-      </ClosableList>
+      <TextField
+        name={`layers[${blockIndex}].price`}
+        label="Valor (R$)"
+        containerClassName="mt-4"
+        isRequired
+        formatOnChangeText={moneyFormat}
+        placeholder="Valor para este bloco"
+      />
       <ClosableList title="Materiais" containerClassName="mt-8">
         <Select
           name={`layers[${blockIndex}].materials`}
           label="Materiais"
           placeholder="Selecione os materiais"
-          data={[]}
+          data={{
+            variant: 'array',
+            fetch: async () => {
+              const response = await api.get<{ name: string }[]>(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { params: { type: 'materials' } },
+              );
+
+              return response.data.map(i => ({ value: i.name }));
+            },
+            onAddFilter: async name => {
+              await api.post(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { name },
+                { params: { type: 'materials' } },
+              );
+            },
+          }}
         />
         <ul className="flex flex-wrap mt-2">
           {(layers.value[blockIndex] as any).materials.map(item => (

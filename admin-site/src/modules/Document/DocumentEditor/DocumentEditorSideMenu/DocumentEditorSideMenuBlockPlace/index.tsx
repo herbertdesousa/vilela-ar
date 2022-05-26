@@ -8,6 +8,7 @@ import { useDocument } from '@/hook/document';
 
 import { IDocumentFormDataLayersBlockPlaceDevice } from '@/hook/document/types/DocumentFormData';
 import upFirstLetterFormat from '@/utils/upFirstLetterFormat';
+import { api } from '@/services/api';
 
 const DocumentEditorSideMenuBlockPlace: React.FC = () => {
   const router = useRouter();
@@ -86,15 +87,58 @@ const DocumentEditorSideMenuBlockPlace: React.FC = () => {
           label="Nome do Local"
           isRequired
           placeholder="Selecione o nome da sala"
-          data={[]}
           className="mt-8"
+          data={{
+            variant: 'single',
+            fetch: async () => {
+              const response = await api.get<{ name: string }[]>(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { params: { type: 'place-room' } },
+              );
+
+              return response.data.map(i => ({ value: i.name }));
+            },
+            onAddFilter: async name => {
+              await api.post(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { name },
+                { params: { type: 'place-room' } },
+              );
+            },
+          }}
         />
         <Select
           name={`layers[${blockIndex}].places[${blockPlaceIndex}].floor`}
           label="Nome do Piso"
-          data={[]}
-          placeholder="Selecione o nome da sala"
-          className="mt-4"
+          placeholder="Selecione o piso"
+          className="mt-8"
+          showClearField
+          data={{
+            variant: 'single',
+            fetch: async () => {
+              const response = await api.get<{ name: string }[]>(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { params: { type: 'place-floor' } },
+              );
+
+              return response.data.map(i => ({ value: i.name }));
+            },
+            onAddFilter: async name => {
+              await api.post(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { name },
+                { params: { type: 'place-floor' } },
+              );
+            },
+          }}
         />
         <ClosableList
           title="Aparelhos"

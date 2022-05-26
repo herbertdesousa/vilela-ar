@@ -20,13 +20,18 @@ export const DOCUMENT_BLOCK_INITIALS: IDocumentFormData = {
       representative_engineer: '',
       order: -100000,
       customer: {
-        id: '',
         name: '',
         document: '',
         representative: '',
-        address: {
-          id: '',
-        },
+      },
+      address: {
+        street: '',
+        number: '',
+        complement: '',
+        neighborhood: '',
+        city: 'São Paulo',
+        state: 'SP',
+        postalCode: '',
       },
     },
     {
@@ -35,46 +40,14 @@ export const DOCUMENT_BLOCK_INITIALS: IDocumentFormData = {
       title: 'Bloco I',
       order: 0,
       description: '',
-      price: {
-        value: '',
-        sum_price_in_payment: false,
-      },
-      materials: [
-        'Cano de Cobre',
-        'Cabo PP (4 vias)',
-        'Isolamento térmico',
-        'Buchas',
-      ],
+      price: '',
+      materials: [],
       places: [
         {
           id: v4(),
-          floor: 'Pavimento I',
-          room: 'Suite I',
-          devices: [
-            {
-              id: v4(),
-              quantity: 1,
-              type: 'ar condicionado',
-              brand: 'Fujitsu',
-              capacity: '24.000BTUS',
-              mode: 'Split',
-            },
-          ],
-        },
-        {
-          id: v4(),
+          room: 'Sala',
           floor: '',
-          room: 'Suite I',
-          devices: [
-            {
-              id: v4(),
-              quantity: 1,
-              type: 'ar condicionado',
-              brand: 'Fujitsu',
-              capacity: '24.000BTUS',
-              mode: 'Split',
-            },
-          ],
+          devices: [],
         },
       ],
     },
@@ -85,7 +58,6 @@ export const DOCUMENT_BLOCK_INITIALS: IDocumentFormData = {
       isLock: true,
       order: 100000,
       comments: '',
-      sum_all_prices: true,
     },
   ],
 };

@@ -13,6 +13,7 @@ import { BreadCrumb, Select, TextField } from '@/components';
 import onlyNumbersFormat from '@/utils/onlyNumbersFormat';
 
 import { useDocument } from '@/hook/document';
+import { api } from '@/services/api';
 
 const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
   const router = useRouter();
@@ -44,6 +45,11 @@ const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
     });
   };
 
+  const onDeleteItem = () => {
+    layers.places.devices.remove(blockId, blockPlaceId, blockPlaceDeviceId);
+    backToBlockPlacePage();
+  };
+
   return (
     <section
       className="min-h-full overflow-x-scroll no-scroll"
@@ -61,14 +67,7 @@ const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
         <button
           type="button"
           className="flex items-center text-accent-6 font-medium"
-          onClick={() => {
-            layers.places.devices.remove(
-              blockId,
-              blockPlaceId,
-              blockPlaceDeviceId,
-            );
-            backToBlockPlacePage();
-          }}
+          onClick={onDeleteItem}
         >
           <MdDelete size={20} className="mr-1 text-red" />
           Deletar
@@ -99,34 +98,118 @@ const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
         <Select
           name={`layers[${blockIndex}].places[${blockPlaceIndex}].devices[${blockPlaceDeviceIndex}].type`}
           label="Tipo"
-          isRequired
-          data={[]}
           placeholder="Tipo de Ar Condicionado"
+          showClearField
           className="mt-8"
+          data={{
+            variant: 'single',
+            fetch: async () => {
+              const response = await api.get<{ name: string }[]>(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { params: { type: 'device-type' } },
+              );
+
+              return response.data.map(i => ({ value: i.name }));
+            },
+            onAddFilter: async name => {
+              await api.post(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { name },
+                { params: { type: 'device-type' } },
+              );
+            },
+          }}
         />
         <Select
           name={`layers[${blockIndex}].places[${blockPlaceIndex}].devices[${blockPlaceDeviceIndex}].mode`}
           label="Modo"
-          isRequired
-          data={[]}
           placeholder="Modo de Ar Condicionado"
+          showClearField
           className="mt-2"
+          data={{
+            variant: 'single',
+            fetch: async () => {
+              const response = await api.get<{ name: string }[]>(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { params: { type: 'device-mode' } },
+              );
+
+              return response.data.map(i => ({ value: i.name }));
+            },
+            onAddFilter: async name => {
+              await api.post(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { name },
+                { params: { type: 'device-mode' } },
+              );
+            },
+          }}
         />
         <Select
           name={`layers[${blockIndex}].places[${blockPlaceIndex}].devices[${blockPlaceDeviceIndex}].brand`}
           label="Marca"
-          isRequired
-          data={[]}
           placeholder="Marca do Ar Condicionado"
+          showClearField
           className="mt-2"
+          data={{
+            variant: 'single',
+            fetch: async () => {
+              const response = await api.get<{ name: string }[]>(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { params: { type: 'device-brand' } },
+              );
+
+              return response.data.map(i => ({ value: i.name }));
+            },
+            onAddFilter: async name => {
+              await api.post(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { name },
+                { params: { type: 'device-brand' } },
+              );
+            },
+          }}
         />
         <Select
           name={`layers[${blockIndex}].places[${blockPlaceIndex}].devices[${blockPlaceDeviceIndex}].capacity`}
           label="Capacidade"
-          isRequired
-          data={[]}
           placeholder="Capacidade do Ar Condicionado"
+          showClearField
           className="mt-2"
+          data={{
+            variant: 'single',
+            fetch: async () => {
+              const response = await api.get<{ name: string }[]>(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { params: { type: 'device-capacity' } },
+              );
+
+              return response.data.map(i => ({ value: i.name }));
+            },
+            onAddFilter: async name => {
+              await api.post(
+                `http://${
+                  process.browser && window.location.host
+                }/api/documents`,
+                { name },
+                { params: { type: 'device-capacity' } },
+              );
+            },
+          }}
         />
         <TextField
           name={`layers[${blockIndex}].places[${blockPlaceIndex}].devices[${blockPlaceDeviceIndex}].quantity`}
