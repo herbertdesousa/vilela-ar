@@ -1,6 +1,10 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-new */
 import React, { useCallback, useEffect, useState } from 'react';
 import { useField } from 'formik';
+
+import html2canvas from 'html2canvas';
+import { jsPDF as JsPDF } from 'jspdf';
 
 import { v4 } from 'uuid';
 
@@ -43,6 +47,21 @@ const order = (
 
   return result;
 };
+
+function delay(delayInms: number) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(2);
+    }, delayInms);
+  });
+}
+function sleep(milliseconds: number) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
 
 export const DocumentProvider: React.FC = ({ children }) => {
   const [{ value: document_type }] = useField<IDocumentFormDataType>('type');
@@ -321,6 +340,14 @@ export const DocumentProvider: React.FC = ({ children }) => {
       order: 1,
     },
   ]);
+  const changePage = useCallback(pageName => {
+    setPreviewPages(st =>
+      st.map(page => ({
+        ...page,
+        isActive: page.label === pageName,
+      })),
+    );
+  }, []);
 
   useEffect(() => {
     if (add_bank_details_page) {
@@ -391,11 +418,10 @@ export const DocumentProvider: React.FC = ({ children }) => {
         return updatedBlocks;
       }
 
-      // console.log(st.flat().sort((a: any, b: any) => a.order - b.order));
       const updatedBlocks = order(
         [
-          ...st.flat().map(i => ({ ...i, height: i.height || 95 })),
-          { ...payload, height: payload.height || 95 },
+          ...st.flat().map(i => ({ ...i, height: i.height || 48 })),
+          { ...payload, height: payload.height || 48 },
         ].sort((a: any, b: any) => a.order - b.order),
         pageHeight,
       );
@@ -412,32 +438,65 @@ export const DocumentProvider: React.FC = ({ children }) => {
     });
   }, []);
 
-  // const changePreviewPage = (page: IPreviewPages) => {
-  //   setPreviewPages(st =>
-  //     st.map(i => (i.label === page.label ? { ...page, isActive: true } : i)),
-  //   );
-  // };
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
-  // console.log(order(blocksInPage.flat(), 350));
-  // console.log(
-  //   blocksInPage.map(i => i.map(x => ({ height: x.height, width: x.width }))),
-  // );
+  const generatePDF = useCallback(async () => {
+    setIsGeneratingPDF(true);
+
+    const pdf = new JsPDF('p', 'px', '', true);
+    const currentPdfPage = { page: pdf };
+
+    // eslint-disable-next-line no-plusplus
+    for (let pageIndex = 0; pageIndex < previewPages.length; pageIndex++) {
+      setPreviewPages(pages =>
+        pages.map((p, idx) => ({ ...p, isActive: idx === pageIndex })),
+      );
+
+      await delay(10);
+
+      const takePicAndSave = async () => {
+        await html2canvas(document.getElementById('page')).then(canvas => {
+          const imgData = canvas.toDataURL('image/png');
+
+          const imgProps = currentPdfPage.page.getImageProperties(imgData);
+          const pdfWidth = currentPdfPage.page.internal.pageSize.getWidth();
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+          currentPdfPage.page.addImage(
+            imgData,
+            'JPEG',
+            0,
+            0,
+            pdfWidth,
+            pdfHeight,
+            '',
+            'FAST',
+          );
+        });
+
+        if (pageIndex !== previewPages.length - 1)
+          currentPdfPage.page = pdf.addPage('', 'p');
+      };
+      await takePicAndSave();
+    }
+
+    pdf.save();
+    await delay(1);
+    setIsGeneratingPDF(false);
+  }, [previewPages]);
 
   return (
     <DocumentContext.Provider
       value={{
+        pdf: {
+          isGeneratingPDF,
+          generate: generatePDF,
+        },
         previewPages: {
           value: previewPages,
           activeIndex: previewPages.findIndex(i => i.isActive),
           activeName: previewPages.find(i => i.isActive).label,
-          changePage: pageName => {
-            setPreviewPages(st =>
-              st.map(page => ({
-                ...page,
-                isActive: page.label === pageName,
-              })),
-            );
-          },
+          changePage,
         },
         blocksInPage,
         saveBlockInPageMeasures,

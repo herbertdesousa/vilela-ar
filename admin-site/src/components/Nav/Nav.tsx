@@ -17,7 +17,7 @@ const pages = [
     Icon: MdAttachMoney,
   },
   {
-    href: '/documents',
+    href: '/documents/editor',
     Icon: MdDescription,
   },
 ];

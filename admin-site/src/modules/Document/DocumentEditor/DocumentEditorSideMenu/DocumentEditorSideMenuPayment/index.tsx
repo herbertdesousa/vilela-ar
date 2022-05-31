@@ -28,11 +28,6 @@ const DocumentEditorSideMenuGeneral: React.FC = () => {
           type="textarea"
           containerClassName="mt-4"
         />
-        <Checkbox
-          name={`layers[${layers.value.length - 1}].sum_all_prices`}
-          label="Somar todos os preços"
-          containerClassName="mt-4"
-        />
       </div>
     </section>
   );

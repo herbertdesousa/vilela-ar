@@ -1,11 +1,15 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
+import { useDocument } from '@/hook/document';
+
 import { Button } from '@/components';
 import { MdChevronLeft } from 'react-icons/md';
 
 const DocumentEditorNav: React.FC = () => {
   const router = useRouter();
+
+  const { pdf } = useDocument();
 
   return (
     <nav className="flex justify-between items-center w-full px-10 h-24 border-b border-accent-2">
@@ -26,7 +30,9 @@ const DocumentEditorNav: React.FC = () => {
         <Button size="sm" variant="outline" className="mr-2">
           Salvar
         </Button>
-        <Button size="sm">Gerar PDF</Button>
+        <Button size="sm" onClick={pdf.generate}>
+          Gerar PDF
+        </Button>
       </div>
     </nav>
   );

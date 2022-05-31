@@ -28,6 +28,11 @@ export interface IPreviewPages {
 }
 
 export interface IDocumentContextData {
+  pdf: {
+    isGeneratingPDF: boolean;
+    generate: () => void;
+  };
+
   previewPages: {
     value: IPreviewPages[];
     activeIndex: number;

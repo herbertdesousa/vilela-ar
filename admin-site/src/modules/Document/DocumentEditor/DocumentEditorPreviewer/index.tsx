@@ -15,7 +15,7 @@ const DOCUMENT_HEIGHT = 842;
 const DocumentEditorPreviewer: React.FC = () => {
   const router = useRouter();
 
-  const { blocksInPage, previewPages } = useDocument();
+  const { blocksInPage, previewPages, pdf } = useDocument();
 
   const pushDocumentoEditorPage = () => {
     router.push('/documents/editor');
@@ -34,10 +34,12 @@ const DocumentEditorPreviewer: React.FC = () => {
       </div>
 
       <div
+        id="page"
         style={{
           width: 595,
           zoom: 0.9,
           height: DOCUMENT_HEIGHT,
+          transform: `scale(${pdf.isGeneratingPDF ? '4, 4' : '1, 1'})`,
         }}
         className="relative bg-accent-0 rounded z-10"
       >

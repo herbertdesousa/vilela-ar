@@ -7,7 +7,7 @@ const DocumentEditorPreviewerBankDetails: React.FC = () => {
 
   if (!add_bank_details_page) return <></>;
   return (
-    <>
+    <div id="paper" className="bg-accent-0" style={{ height: 842, width: 595 }}>
       <div
         className="flex items-center p-12 rounded-t"
         style={{ backgroundColor: '#FAFAFC' }}
@@ -18,65 +18,67 @@ const DocumentEditorPreviewerBankDetails: React.FC = () => {
         </h2>
       </div>
 
-      <div className="mt-12 ml-12">
-        <h3 className="text-base font-semibold">Bradesco</h3>
+      <div>
+        <div className="mt-12 ml-12">
+          <h3 className="text-base font-semibold">Bradesco</h3>
 
-        <div className="mt-1 text-xs font-medium">
-          <p>
-            <span className="underline">Nome</span>
-            :&nbsp;José Aparecido Vilela
-          </p>
-          <p>
-            <span className="underline">CPF</span>
-            :&nbsp;033.448.179-14
-          </p>
-          <p>
-            <span className="underline">Agência</span>
-            :&nbsp;0088
-          </p>
-          <p>
-            <span className="underline">Conta</span>
-            :&nbsp;Bradesco C.C. 0610106.2
-          </p>
+          <div className="mt-1 text-xs font-medium">
+            <p>
+              <span className="underline">Nome</span>
+              :&nbsp;José Aparecido Vilela
+            </p>
+            <p>
+              <span className="underline">CPF</span>
+              :&nbsp;033.448.179-14
+            </p>
+            <p>
+              <span className="underline">Agência</span>
+              :&nbsp;0088
+            </p>
+            <p>
+              <span className="underline">Conta</span>
+              :&nbsp;Bradesco C.C. 0610106.2
+            </p>
+          </div>
+        </div>
+        <div className="mt-8 ml-12">
+          <h3 className="text-base font-semibold">Itaú</h3>
+
+          <div className="mt-1 text-xs font-medium">
+            <p>
+              <span className="underline">Nome</span>
+              :&nbsp;José Aparecido Vilela
+            </p>
+            <p>
+              <span className="underline">CPF</span>
+              :&nbsp;033.448.179-14
+            </p>
+            <p>
+              <span className="underline">Agência</span>
+              :&nbsp;0771
+            </p>
+            <p>
+              <span className="underline">Conta</span>
+              :&nbsp;Itaú C. C. 23648.6
+            </p>
+          </div>
+        </div>
+        <div className="mt-8 ml-12">
+          <h3 className="text-base font-semibold">PIX</h3>
+
+          <div className="mt-1 text-xs font-medium">
+            <p>
+              <span className="underline">Tipo</span>
+              :&nbsp;CPF
+            </p>
+            <p>
+              <span className="underline">Chave</span>
+              :&nbsp;033.448.179-14
+            </p>
+          </div>
         </div>
       </div>
-      <div className="mt-8 ml-12">
-        <h3 className="text-base font-semibold">Itaú</h3>
-
-        <div className="mt-1 text-xs font-medium">
-          <p>
-            <span className="underline">Nome</span>
-            :&nbsp;José Aparecido Vilela
-          </p>
-          <p>
-            <span className="underline">CPF</span>
-            :&nbsp;033.448.179-14
-          </p>
-          <p>
-            <span className="underline">Agência</span>
-            :&nbsp;0771
-          </p>
-          <p>
-            <span className="underline">Conta</span>
-            :&nbsp;Itaú C. C. 23648.6
-          </p>
-        </div>
-      </div>
-      <div className="mt-8 ml-12">
-        <h3 className="text-base font-semibold">PIX</h3>
-
-        <div className="mt-1 text-xs font-medium">
-          <p>
-            <span className="underline">Tipo</span>
-            :&nbsp;CPF
-          </p>
-          <p>
-            <span className="underline">Chave</span>
-            :&nbsp;033.448.179-14
-          </p>
-        </div>
-      </div>
-    </>
+    </div>
   );
 };
 

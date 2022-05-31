@@ -43,6 +43,10 @@ const DocumentEditorSideMenuBlock: React.FC = () => {
     router.push('/documents/editor');
   };
 
+  if (!layers.value[blockIndex]) {
+    backToDocumentsPage();
+    return <></>;
+  }
   return (
     <section
       className="min-h-full py-16 px-10 overflow-x-scroll no-scroll"
@@ -84,8 +88,8 @@ const DocumentEditorSideMenuBlock: React.FC = () => {
                 item: <span className="text-red">Remover</span>,
                 value: 'remove',
                 onSelect: () => {
-                  layers.remove(blockIndex);
                   backToDocumentsPage();
+                  layers.remove(blockIndex);
                 },
               },
             ]}

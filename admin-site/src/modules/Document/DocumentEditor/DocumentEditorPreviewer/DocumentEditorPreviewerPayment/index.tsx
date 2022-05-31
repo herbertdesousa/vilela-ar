@@ -81,7 +81,7 @@ const DocumentEditorPreviewerPayment: React.FC<
                 key={b.id}
                 className={`flex justify-between ${index !== 0 ? 'mt-1' : ''}`}
               >
-                <span>{b.title}</span>
+                <span style={{ maxWidth: 128 }}>{b.title}</span>
                 <span>{b.price}</span>
               </div>
             ))}
