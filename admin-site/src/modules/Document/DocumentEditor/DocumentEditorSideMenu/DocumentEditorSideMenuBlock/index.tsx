@@ -1,17 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { MdChevronLeft, MdClose, MdMoreVert } from 'react-icons/md';
 import { useRouter } from 'next/router';
 
-import {
-  IDocumentFormDataLayersBlock,
-  IDocumentFormDataLayersBlockPlace,
-} from '@/hook/document/types/DocumentFormData';
-import { useField } from 'formik';
-import { v4 } from 'uuid';
+import { IDocumentFormDataLayersBlockPlace } from '@/hook/document/types/DocumentFormData';
 
 import { useDocument } from '@/hook/document';
 import {
-  Checkbox,
   ClosableList,
   Dropdown,
   ListItem,
@@ -39,12 +33,15 @@ const DocumentEditorSideMenuBlock: React.FC = () => {
     });
   };
 
-  const backToDocumentsPage = () => {
+  const backToDocumentsPage = useCallback(() => {
     router.push('/documents/editor');
-  };
+  }, [router]);
+
+  useEffect(() => {
+    if (!layers.value[blockIndex]) backToDocumentsPage();
+  }, [backToDocumentsPage, blockIndex, layers.value]);
 
   if (!layers.value[blockIndex]) {
-    backToDocumentsPage();
     return <></>;
   }
   return (

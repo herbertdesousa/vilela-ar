@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { MdChevronLeft, MdDelete, MdMoreVert } from 'react-icons/md';
@@ -18,7 +18,7 @@ const DocumentEditorSideMenuBlockPlace: React.FC = () => {
   const blockIndex = layers.value.findIndex(i => i.id === blockId);
 
   const blockPlaceId = String(router.query.block_place_id);
-  const blockPlaceIndex = (layers.value[blockIndex] as any).places.findIndex(
+  const blockPlaceIndex = (layers.value[blockIndex] as any)?.places.findIndex(
     i => i.id === blockPlaceId,
   );
 
@@ -40,6 +40,20 @@ const DocumentEditorSideMenuBlockPlace: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    if (
+      !layers.value[blockIndex] ||
+      (layers.value[blockPlaceIndex] as any)?.places
+    )
+      router.push('/documents/editor');
+  }, [blockIndex, layers.value, router]);
+
+  if (
+    !layers.value[blockIndex] ||
+    (layers.value[blockPlaceIndex] as any)?.places
+  ) {
+    return <></>;
+  }
   return (
     <section
       className="min-h-full overflow-x-scroll no-scroll"
