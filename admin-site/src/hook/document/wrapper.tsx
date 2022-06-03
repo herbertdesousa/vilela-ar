@@ -7,6 +7,7 @@ import { DocumentProvider } from './provider';
 import { IDocumentFormData } from './types/DocumentFormData';
 
 export const DOCUMENT_BLOCK_INITIALS: IDocumentFormData = {
+  id: v4(),
   type: 'orçamento',
   title: 'Sem Título',
   add_bank_details_page: false,

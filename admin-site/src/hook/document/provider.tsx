@@ -1,16 +1,20 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-new */
 import React, { useCallback, useEffect, useState } from 'react';
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 
 import html2canvas from 'html2canvas';
 import { jsPDF as JsPDF } from 'jspdf';
 
 import { v4 } from 'uuid';
 
+import upFirstLetterFormat from '@/utils/upFirstLetterFormat';
+
 import { DocumentContext } from './context';
 import {
+  IDocumentFormData,
   IDocumentFormDataLayers,
+  IDocumentFormDataLayersHeader,
   IDocumentFormDataLayersBlock,
   IDocumentFormDataLayersBlockPlace,
   IDocumentFormDataLayersBlockPlaceDevice,
@@ -18,6 +22,16 @@ import {
 } from './types/DocumentFormData';
 import { DOCUMENT_BLOCK_INITIALS } from './wrapper';
 import { IBlocksInPageItem, IPreviewPages } from './types';
+
+const DOCUMENTS_STORAGE_KEY = '@documents';
+
+const PREVIEW_PAGES_DEFAULT = [
+  {
+    label: 'Página 1',
+    isActive: true,
+    order: 1,
+  },
+];
 
 const order = (
   arr: IBlocksInPageItem[],
@@ -55,76 +69,95 @@ function delay(delayInms: number) {
     }, delayInms);
   });
 }
-function sleep(milliseconds: number) {
-  const date = Date.now();
-  let currentDate = null;
-  do {
-    currentDate = Date.now();
-  } while (currentDate - date < milliseconds);
-}
 
 export const DocumentProvider: React.FC = ({ children }) => {
-  const [{ value: document_type }] = useField<IDocumentFormDataType>('type');
-  const [{ value: add_bank_details_page }] = useField<IDocumentFormDataType>(
-    'add_bank_details_page',
-  );
-  const [{ value: layers }, _, { setValue: setLayers }] =
-    useField<IDocumentFormDataLayers[]>('layers');
+  const {
+    values: documentData,
+    setFieldValue,
+    resetForm,
+    setValues,
+  } = useFormikContext<IDocumentFormData>();
+
+  const [documents, setDocuments] = useState<IDocumentFormData[]>(() => {
+    if (!process.browser) return [];
+
+    return (
+      (JSON.parse(
+        localStorage.getItem(DOCUMENTS_STORAGE_KEY),
+      ) as IDocumentFormData[]) || []
+    );
+  });
+
+  useEffect(() => {
+    const customerName = (
+      documentData.layers[0] as IDocumentFormDataLayersHeader
+    ).customer.name;
+
+    setFieldValue(
+      'title',
+      customerName
+        ? `${upFirstLetterFormat(documentData.type)} - ${customerName}`
+        : 'Sem Título',
+    );
+  }, [documentData.layers[0], documentData.type, setFieldValue]);
 
   const layersMoveUp = useCallback(
     (index: number) => {
-      const item = layers[index];
+      const item = documentData.layers[index];
       if (item.type === 'header' || item.type === 'payment') return;
 
-      setLayers(
-        layers.map((i, idx: number) => {
+      setFieldValue(
+        'layers',
+        documentData.layers.map((i, idx: number) => {
           if (i.id === item.id) return { ...i, order: i.order - 1 };
           if (index - 1 === idx) return { ...i, order: i.order + 1 };
           return i;
         }),
       );
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
   const layersMoveDown = useCallback(
     (index: number) => {
-      const item = layers[index];
+      const item = documentData.layers[index];
       if (item.type === 'header' || item.type === 'payment') return;
 
-      setLayers(
-        layers.map((i, idx: number) => {
+      setFieldValue(
+        'layers',
+        documentData.layers.map((i, idx: number) => {
           if (i.id === item.id) return { ...i, order: i.order + 1 };
           if (index + 1 === idx) return { ...i, order: i.order - 1 };
           return i;
         }),
       );
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
   const layersDuplicate = useCallback(
     (index: number) => {
-      const item = layers[index];
+      const item = documentData.layers[index];
       const higherOrder = Math.max(
-        ...layers
+        ...documentData.layers
           .filter(i => i.type !== 'header' && i.type !== 'payment')
           .map((i: any) => i.order),
       );
 
       const updatedItem = {
-        ...layers.find(layer => layer.id === item.id),
+        ...documentData.layers.find(layer => layer.id === item.id),
         id: v4(),
         title: `${item.title} (Cópia)`,
         order: higherOrder + 1,
       } as IDocumentFormDataLayersBlock;
-      setLayers([...layers, updatedItem]);
+      setFieldValue('layers', [...documentData.layers, updatedItem]);
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
   const layersRemove = useCallback(
     (index: number) => {
-      const item = layers[index];
-      setLayers(
-        layers
+      const item = documentData.layers[index];
+      setFieldValue(
+        'layers',
+        documentData.layers
           .filter(i => i.id !== item.id)
           .map((i, idx) => {
             if (i.type === 'header' || i.type === 'payment') return i;
@@ -134,11 +167,11 @@ export const DocumentProvider: React.FC = ({ children }) => {
 
       removeBlockInPageMeasures(item.id);
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
   const layersAdd = useCallback(() => {
     const higherOrder = Math.max(
-      ...layers
+      ...documentData.layers
         .filter(i => i.type !== 'header' && i.type !== 'payment')
         .map(i => i.order),
       0,
@@ -151,13 +184,14 @@ export const DocumentProvider: React.FC = ({ children }) => {
       type: 'block',
       title: 'Bloco',
     } as IDocumentFormDataLayersBlock;
-    setLayers([...layers, item]);
-  }, [layers, setLayers]);
+    setFieldValue('layers', [...documentData.layers, item]);
+  }, [documentData.layers, setFieldValue]);
 
   const materialsRemove = useCallback(
     (blockId: string, materialId: string) => {
-      setLayers(
-        layers.map((block: IDocumentFormDataLayersBlock) => {
+      setFieldValue(
+        'layers',
+        documentData.layers.map((block: IDocumentFormDataLayersBlock) => {
           if (block.id !== blockId) return block;
           return {
             ...block,
@@ -166,14 +200,15 @@ export const DocumentProvider: React.FC = ({ children }) => {
         }),
       );
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
 
   const placeDuplicate = useCallback(
     (blockId: string, item: IDocumentFormDataLayersBlockPlace) => {
       const duplicateItem = { ...item, id: v4() };
-      setLayers(
-        layers.map((block: IDocumentFormDataLayersBlock) => {
+      setFieldValue(
+        'layers',
+        documentData.layers.map((block: IDocumentFormDataLayersBlock) => {
           if (block.id !== blockId) return block;
           return {
             ...block,
@@ -187,12 +222,13 @@ export const DocumentProvider: React.FC = ({ children }) => {
         }),
       );
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
   const placeRemove = useCallback(
     (blockId: string, placeId: string) => {
-      setLayers(
-        layers.map((block: IDocumentFormDataLayersBlock) => {
+      setFieldValue(
+        'layers',
+        documentData.layers.map((block: IDocumentFormDataLayersBlock) => {
           if (block.id !== blockId) return block;
           return {
             ...block,
@@ -206,14 +242,15 @@ export const DocumentProvider: React.FC = ({ children }) => {
         }),
       );
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
   const placeAdd = useCallback(
     (blockId: string) => {
       const item = { id: v4(), devices: [], room: 'Sala', floor: '' };
 
-      setLayers(
-        layers.map((block: IDocumentFormDataLayersBlock) => {
+      setFieldValue(
+        'layers',
+        documentData.layers.map((block: IDocumentFormDataLayersBlock) => {
           if (block.id !== blockId) return block;
           return {
             ...block,
@@ -227,7 +264,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
         }),
       );
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
 
   const placeDeviceDuplicate = useCallback(
@@ -236,8 +273,9 @@ export const DocumentProvider: React.FC = ({ children }) => {
       placeId: string,
       item: IDocumentFormDataLayersBlockPlaceDevice,
     ) => {
-      setLayers(
-        layers.map((block: IDocumentFormDataLayersBlock) => {
+      setFieldValue(
+        'layers',
+        documentData.layers.map((block: IDocumentFormDataLayersBlock) => {
           if (block.id !== blockId) return block;
           return {
             ...block,
@@ -252,12 +290,13 @@ export const DocumentProvider: React.FC = ({ children }) => {
         }),
       );
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
   const placeDeviceRemove = useCallback(
     (blockId: string, placeId: string, deviceId: string) => {
-      setLayers(
-        layers.map((block: IDocumentFormDataLayersBlock) => {
+      setFieldValue(
+        'layers',
+        documentData.layers.map((block: IDocumentFormDataLayersBlock) => {
           if (block.id !== blockId) return block;
           return {
             ...block,
@@ -272,12 +311,13 @@ export const DocumentProvider: React.FC = ({ children }) => {
         }),
       );
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
   const placeDeviceAdd = useCallback(
     (blockId: string, placeId: string) => {
-      setLayers(
-        layers.map((block: IDocumentFormDataLayersBlock) => {
+      setFieldValue(
+        'layers',
+        documentData.layers.map((block: IDocumentFormDataLayersBlock) => {
           if (block.id !== blockId) return block;
           return {
             ...block,
@@ -302,44 +342,46 @@ export const DocumentProvider: React.FC = ({ children }) => {
         }),
       );
     },
-    [layers, setLayers],
+    [documentData.layers, setFieldValue],
   );
 
-  const [blocksInPage, setBlocksInPage] = useState<IBlocksInPageItem[][]>([
-    [
-      {
-        height: 0,
-        width: 0,
-        ...(layers.filter(
-          item => item.type === 'block',
-        )[0] as IDocumentFormDataLayersBlock),
-      },
-      {
-        height: 0,
-        width: 0,
-        ...(layers.filter(
-          item => item.type === 'payment',
-        )[0] as IDocumentFormDataLayersBlock),
-      },
+  const blockInPageDefault = useCallback(
+    (layers: IDocumentFormDataLayers[]) => [
+      [
+        {
+          height: 0,
+          width: 0,
+          ...(layers.filter(
+            item => item.type === 'block',
+          )[0] as IDocumentFormDataLayersBlock),
+        },
+        {
+          height: 0,
+          width: 0,
+          ...(layers.filter(
+            item => item.type === 'payment',
+          )[0] as IDocumentFormDataLayersBlock),
+        },
+      ],
     ],
-  ]);
+    [],
+  );
+  const [blocksInPage, setBlocksInPage] = useState<IBlocksInPageItem[][]>(
+    blockInPageDefault(documentData.layers),
+  );
 
   useEffect(() => {
-    layers.map(i => {
+    documentData.layers.map(i => {
       if (i.type === 'block')
         saveBlockInPageMeasures({ ...i, width: 0, height: 0 });
 
       return i;
     }, []);
-  }, [layers]);
+  }, [documentData.layers]);
 
-  const [previewPages, setPreviewPages] = useState<IPreviewPages[]>([
-    {
-      label: 'Página 1',
-      isActive: true,
-      order: 1,
-    },
-  ]);
+  const [previewPages, setPreviewPages] = useState<IPreviewPages[]>(
+    PREVIEW_PAGES_DEFAULT,
+  );
   const changePage = useCallback(pageName => {
     setPreviewPages(st =>
       st.map(page => ({
@@ -350,7 +392,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (add_bank_details_page) {
+    if (documentData.add_bank_details_page) {
       setPreviewPages(st => [
         ...st,
         { label: 'Dados Bancários', isActive: false, order: 100000 },
@@ -365,7 +407,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
           })),
       );
     }
-  }, [add_bank_details_page]);
+  }, [documentData.add_bank_details_page]);
 
   const saveBlockInPageMeasures = useCallback((payload: IBlocksInPageItem) => {
     const savePreviewPages = (updatedBlocks: IBlocksInPageItem[][]) => {
@@ -485,9 +527,48 @@ export const DocumentProvider: React.FC = ({ children }) => {
     setIsGeneratingPDF(false);
   }, [previewPages]);
 
+  const saveDocument = useCallback(() => {
+    const updatedDocs = documents.find(doc => doc.id === documentData.id)
+      ? documents.map(doc => (doc.id === documentData.id ? documentData : doc))
+      : [documentData, ...documents];
+
+    localStorage.setItem(DOCUMENTS_STORAGE_KEY, JSON.stringify(updatedDocs));
+    setDocuments(updatedDocs);
+  }, [documents, documentData]);
+
+  const deleteDocument = useCallback(
+    (id: string) => {
+      const updatedDocs = documents.filter(doc => doc.id !== id);
+
+      localStorage.setItem(DOCUMENTS_STORAGE_KEY, JSON.stringify(updatedDocs));
+      setDocuments(updatedDocs);
+    },
+    [documents],
+  );
+
+  const clearEditor = useCallback(async () => {
+    setPreviewPages(PREVIEW_PAGES_DEFAULT);
+    setBlocksInPage(blockInPageDefault(documentData.layers));
+    resetForm();
+  }, [blockInPageDefault, documentData.layers, resetForm]);
+
+  const startEditor = useCallback(
+    (data: IDocumentFormData) => {
+      setValues(data);
+      setPreviewPages(PREVIEW_PAGES_DEFAULT);
+      setBlocksInPage(blockInPageDefault(data.layers));
+    },
+    [blockInPageDefault, setValues],
+  );
+
   return (
     <DocumentContext.Provider
       value={{
+        saveDocument,
+        deleteDocument,
+        clearEditor,
+        startEditor,
+        documents,
         pdf: {
           isGeneratingPDF,
           generate: generatePDF,
@@ -498,19 +579,20 @@ export const DocumentProvider: React.FC = ({ children }) => {
           activeName: previewPages.find(i => i.isActive).label,
           changePage,
         },
-        blocksInPage,
-        saveBlockInPageMeasures,
-        type: document_type,
-        add_bank_details_page: Boolean(add_bank_details_page),
+        type: documentData.type,
+        add_bank_details_page: Boolean(documentData.add_bank_details_page),
+        title: documentData.title,
         layers: {
-          value: layers,
+          saveBlockInPageMeasures,
+          blocksInPage,
+          value: documentData.layers,
           moveUp: layersMoveUp,
           moveDown: layersMoveDown,
           duplicate: layersDuplicate,
           remove: layersRemove,
           add: layersAdd,
           firstIndex: 1,
-          lastIndex: layers.length - 2,
+          lastIndex: documentData.layers.length - 2,
 
           materials: {
             remove: materialsRemove,

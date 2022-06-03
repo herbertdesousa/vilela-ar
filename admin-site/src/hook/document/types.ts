@@ -5,6 +5,7 @@ import {
   IDocumentFormDataLayersBlockPlace,
   IDocumentFormDataLayersBlockPlaceDevice,
   IDocumentFormDataType,
+  IDocumentFormData,
 } from './types/DocumentFormData';
 
 type IBlocksInPageItemVariants =
@@ -28,6 +29,11 @@ export interface IPreviewPages {
 }
 
 export interface IDocumentContextData {
+  documents: IDocumentFormData[];
+  saveDocument: () => void;
+  clearEditor: () => Promise<void>;
+  deleteDocument: (id: string) => void;
+  startEditor: (data: IDocumentFormData) => void;
   pdf: {
     isGeneratingPDF: boolean;
     generate: () => void;
@@ -39,12 +45,15 @@ export interface IDocumentContextData {
     activeName: string;
     changePage(pageName: string): void;
   };
-  blocksInPage: IBlocksInPageItem[][];
-  saveBlockInPageMeasures: (payload: IBlocksInPageItem) => void;
 
   type: IDocumentFormDataType;
   add_bank_details_page: boolean;
+  title: string;
+
   layers: {
+    blocksInPage: IBlocksInPageItem[][];
+    saveBlockInPageMeasures: (payload: IBlocksInPageItem) => void;
+
     value: IDocumentFormDataLayers[];
     moveUp: (index: number) => void;
     moveDown: (index: number) => void;

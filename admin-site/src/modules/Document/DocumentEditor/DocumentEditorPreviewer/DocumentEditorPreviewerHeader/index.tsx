@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
 
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import upFirstLetterFormat from '@/utils/upFirstLetterFormat';
@@ -26,7 +26,9 @@ const DocumentEditorPreviewerHeader: React.FC<
   )[0] as IDocumentFormDataLayersHeader;
 
   const formatHeaderDate = useMemo((): string => {
-    const date = format(header.date, 'dd MMMM, yyyy', { locale: ptBR });
+    const date = format(new Date(header.date), 'dd MMMM, yyyy', {
+      locale: ptBR,
+    });
 
     const splited = date.split(' ');
     return `${splited[0]} ${upFirstLetterFormat(splited[1])} ${splited[2]}`;

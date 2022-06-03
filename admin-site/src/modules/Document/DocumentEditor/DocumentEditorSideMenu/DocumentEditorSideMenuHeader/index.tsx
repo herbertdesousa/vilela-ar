@@ -71,9 +71,9 @@ const DocumentEditorSideMenuHeader: React.FC = () => {
       <DatePicker name="layers[0].date" label="Data" isRequired />
       <TextField
         name="layers[0].representative_engineer"
-        label="Arquiteto"
+        label="Engenheiro"
         containerClassName="w-full mt-4"
-        placeholder="Nome do engenheiro ou arquiteto"
+        placeholder="Nome do engenheiro"
       />
       <ClosableList title="Cliente" containerClassName="mt-8">
         <TextField

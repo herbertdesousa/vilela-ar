@@ -1,6 +1,8 @@
-- arrumar selects para autocomplete
-- gerar pdf
+- listagem de docs
 
-- finalizar listagem
+- pdf
+  - arrumar nome
+  - enviar pelo wpp
+  - salvar nos docs
 
 - arrumar title das paginas

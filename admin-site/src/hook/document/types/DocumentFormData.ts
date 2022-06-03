@@ -1,5 +1,6 @@
 export type IDocumentFormDataType = 'recibo' | 'orçamento';
 export interface IDocumentFormData {
+  id: string;
   type: IDocumentFormDataType;
   title: string;
   add_bank_details_page: boolean;

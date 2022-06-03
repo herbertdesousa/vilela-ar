@@ -9,7 +9,7 @@ import { MdChevronLeft } from 'react-icons/md';
 const DocumentEditorNav: React.FC = () => {
   const router = useRouter();
 
-  const { pdf } = useDocument();
+  const { pdf, title, saveDocument, clearEditor } = useDocument();
 
   return (
     <nav className="flex justify-between items-center w-full px-10 h-24 border-b border-accent-2">
@@ -23,15 +23,20 @@ const DocumentEditorNav: React.FC = () => {
           Sair
         </button>
 
-        <h1 className="font-merriweather text-2xl font-bold">Sem Título</h1>
+        <h1 className="font-merriweather text-2xl font-bold">{title}</h1>
       </div>
 
       <div className="flex">
-        <Button size="sm" variant="outline" className="mr-2">
+        <Button
+          size="sm"
+          variant="outline"
+          className="mr-2"
+          onClick={clearEditor}
+        >
           Salvar
         </Button>
         <Button size="sm" onClick={pdf.generate}>
-          Gerar PDF
+          Gerar PDF e Enviar
         </Button>
       </div>
     </nav>

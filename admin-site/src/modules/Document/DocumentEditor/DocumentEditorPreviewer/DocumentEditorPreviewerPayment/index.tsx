@@ -20,7 +20,7 @@ interface IDocumentEditorPreviewerPaymentProps {
 const DocumentEditorPreviewerPayment: React.FC<
   IDocumentEditorPreviewerPaymentProps
 > = ({ block }) => {
-  const { layers, saveBlockInPageMeasures } = useDocument();
+  const { layers } = useDocument();
   const router = useRouter();
 
   const payment = layers.value.filter(
@@ -49,7 +49,7 @@ const DocumentEditorPreviewerPayment: React.FC<
   const containerMeasuresRef = useResizeDetector();
 
   useEffect(() => {
-    saveBlockInPageMeasures({
+    layers.saveBlockInPageMeasures({
       ...block,
       height: containerMeasuresRef.height,
       width: containerMeasuresRef.width,

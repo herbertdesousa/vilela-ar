@@ -40,18 +40,14 @@ const DocumentEditorSideMenuBlockPlace: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    if (
-      !layers.value[blockIndex] ||
-      (layers.value[blockPlaceIndex] as any)?.places
-    )
-      router.push('/documents/editor');
-  }, [blockIndex, layers.value, router]);
+  const isRouteValid =
+    layers.value[blockIndex] || (layers.value[blockPlaceIndex] as any)?.places;
 
-  if (
-    !layers.value[blockIndex] ||
-    (layers.value[blockPlaceIndex] as any)?.places
-  ) {
+  useEffect(() => {
+    if (!isRouteValid) router.push('/documents/editor');
+  }, [isRouteValid]);
+
+  if (!isRouteValid) {
     return <></>;
   }
   return (
@@ -99,9 +95,9 @@ const DocumentEditorSideMenuBlockPlace: React.FC = () => {
         <Select
           name={`layers[${blockIndex}].places[${blockPlaceIndex}].room`}
           label="Nome do Local"
-          isRequired
           placeholder="Selecione o nome da sala"
           className="mt-8"
+          showClearField
           data={{
             variant: 'single',
             fetch: async () => {

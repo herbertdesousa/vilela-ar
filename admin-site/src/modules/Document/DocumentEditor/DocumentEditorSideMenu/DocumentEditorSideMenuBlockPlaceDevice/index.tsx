@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { useField } from 'formik';
 import {
+  IDocumentFormDataLayersBlock,
   IDocumentFormDataLayersBlockPlace,
   IDocumentFormDataLayersBlockPlaceDevice,
 } from '@/hook/document/types/DocumentFormData';
@@ -23,14 +23,16 @@ const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
   const blockIndex = layers.value.findIndex(i => i.id === blockId);
 
   const blockPlaceId = String(router.query.block_place_id);
-  const blockPlaceIndex = (layers.value[blockIndex] as any)?.places.findIndex(
-    i => i.id === blockPlaceId,
-  );
+  const blockPlaceIndex = (
+    layers.value[blockIndex] as IDocumentFormDataLayersBlock
+  )?.places.findIndex(i => i.id === blockPlaceId);
 
   const blockPlaceDeviceId = String(router.query.block_place_device_id);
-  const blockPlaceDeviceIndex = (layers.value[blockIndex] as any)?.places[
-    blockPlaceIndex
-  ]?.devices.findIndex(i => i.id === blockPlaceDeviceId);
+  const blockPlaceDeviceIndex = (
+    layers.value[blockIndex] as IDocumentFormDataLayersBlock
+  )?.places[blockPlaceIndex]?.devices.findIndex(
+    i => i.id === blockPlaceDeviceId,
+  );
 
   const backToBlockPlacePage = () => {
     router.push({
@@ -50,27 +52,18 @@ const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
     backToBlockPlacePage();
   };
 
-  useEffect(() => {
-    if (
-      !layers.value[blockIndex] ||
-      (layers.value[blockPlaceIndex] as any)?.places ||
-      (layers.value[blockIndex] as any)?.places[blockPlaceIndex]?.devices
-        ?.devices
-    )
-      router.push('/documents/editor');
-  }, [
-    blockIndex,
-    blockPlaceDeviceIndex,
-    blockPlaceIndex,
-    layers.value,
-    router,
-  ]);
+  const isRouteValid =
+    layers.value[blockIndex] ||
+    (layers.value[blockPlaceIndex] as IDocumentFormDataLayersBlock)?.places ||
+    (layers.value[blockIndex] as IDocumentFormDataLayersBlock)?.places[
+      blockPlaceIndex
+    ]?.devices[blockPlaceDeviceIndex];
 
-  if (
-    !layers.value[blockIndex] ||
-    (layers.value[blockPlaceIndex] as any)?.places ||
-    (layers.value[blockIndex] as any)?.places[blockPlaceIndex]?.devices?.devices
-  ) {
+  useEffect(() => {
+    if (!isRouteValid) router.push('/documents/editor');
+  }, [isRouteValid]);
+
+  if (!isRouteValid) {
     return <></>;
   }
   return (

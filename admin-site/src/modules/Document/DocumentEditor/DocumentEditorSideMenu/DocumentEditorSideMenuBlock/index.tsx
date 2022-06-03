@@ -37,11 +37,13 @@ const DocumentEditorSideMenuBlock: React.FC = () => {
     router.push('/documents/editor');
   }, [router]);
 
-  useEffect(() => {
-    if (!layers.value[blockIndex]) backToDocumentsPage();
-  }, [backToDocumentsPage, blockIndex, layers.value]);
+  const isRouteValid = layers.value[blockIndex];
 
-  if (!layers.value[blockIndex]) {
+  useEffect(() => {
+    if (!isRouteValid) backToDocumentsPage();
+  }, [isRouteValid]);
+
+  if (!isRouteValid) {
     return <></>;
   }
   return (
@@ -185,7 +187,11 @@ const DocumentEditorSideMenuBlock: React.FC = () => {
           renderItem: (item: IDocumentFormDataLayersBlockPlace, idx) => (
             <ListItem
               key={item.id}
-              title={`${item.floor ? `${item.floor} - ` : ''}${item.room}`}
+              title={`${
+                item.floor && item.room
+                  ? `${item.floor} - ${item.room}`
+                  : `${item.floor}${item.room}`
+              }`}
               description={`${item.devices.length} Aparelhos`}
               onClick={() => pushBlockPlacePage(item.id)}
               rightComponent={{

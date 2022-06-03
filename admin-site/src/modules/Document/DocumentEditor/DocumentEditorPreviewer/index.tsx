@@ -15,7 +15,7 @@ const DOCUMENT_HEIGHT = 842;
 const DocumentEditorPreviewer: React.FC = () => {
   const router = useRouter();
 
-  const { blocksInPage, previewPages, pdf } = useDocument();
+  const { layers, previewPages, pdf } = useDocument();
 
   const pushDocumentoEditorPage = () => {
     router.push('/documents/editor');
@@ -49,7 +49,7 @@ const DocumentEditorPreviewer: React.FC = () => {
               type={previewPages.activeIndex !== 0 ? 'small' : 'with-header'}
             />
             <ul className="px-10 pt-8">
-              {blocksInPage[previewPages.activeIndex]
+              {layers.blocksInPage[previewPages.activeIndex]
                 .sort((a: any, b: any) => a.order - b.order)
                 .map((block, blockIndex) => (
                   <div key={block.id}>
