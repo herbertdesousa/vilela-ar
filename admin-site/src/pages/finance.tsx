@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Head from 'next/head';
 
 import { Nav } from '@/components';
 import { FinanceSideMenu, FinanceSaveForm } from '@/modules/Finance';
@@ -13,6 +14,9 @@ const Finance: React.FC = () => {
 
   return (
     <>
+      <Head>
+        <title>Financias</title>
+      </Head>
       <div />
 
       <div className="flex max-h-screen">

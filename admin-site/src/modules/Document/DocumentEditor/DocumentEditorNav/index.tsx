@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useDocument } from '@/hook/document';
 
-import { Button } from '@/components';
+import { Button, Select } from '@/components';
 import { MdChevronLeft } from 'react-icons/md';
 
 const DocumentEditorNav: React.FC = () => {
   const router = useRouter();
 
-  const { pdf, title, saveDocument, clearEditor } = useDocument();
+  const { pdf, title, saveDocument } = useDocument();
+
+  const [isSaving, setIsSaving] = useState(false);
+
+  const onSave = () => {
+    setIsSaving(true);
+
+    saveDocument();
+
+    setTimeout(() => {
+      setIsSaving(false);
+    }, 500);
+  };
 
   return (
     <nav className="flex justify-between items-center w-full px-10 h-24 border-b border-accent-2">
@@ -27,16 +39,11 @@ const DocumentEditorNav: React.FC = () => {
       </div>
 
       <div className="flex">
-        <Button
-          size="sm"
-          variant="outline"
-          className="mr-2"
-          onClick={clearEditor}
-        >
-          Salvar
+        <Button size="sm" variant="outline" className="mr-2" onClick={onSave}>
+          {isSaving ? 'Salvando...' : 'Salvar'}
         </Button>
         <Button size="sm" onClick={pdf.generate}>
-          Gerar PDF e Enviar
+          Enviar PDF
         </Button>
       </div>
     </nav>

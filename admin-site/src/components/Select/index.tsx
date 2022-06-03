@@ -225,7 +225,11 @@ const Select: React.FC<IProps> = ({
 
   return (
     <div className={classNames('relative', className)}>
-      <div className="flex items-center justify-between">
+      <div
+        className={`flex items-center justify-between ${
+          label || showClearField ? 'mb-2' : ''
+        }`}
+      >
         <label htmlFor={name} className="font-medium text-accent-6">
           {label}
           {isRequired && <span className="text-red ml-1">*</span>}
@@ -247,7 +251,7 @@ const Select: React.FC<IProps> = ({
         <Button
           onClick={openSelect}
           variant="outline"
-          className={classNames('w-full mt-2 h-10', buttonClassName)}
+          className={classNames('w-full h-10', buttonClassName)}
           size="sm"
           rightIcon={MdKeyboardArrowDown}
         >

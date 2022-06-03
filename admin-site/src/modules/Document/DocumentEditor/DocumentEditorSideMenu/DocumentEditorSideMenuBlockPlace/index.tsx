@@ -8,7 +8,7 @@ import { useDocument } from '@/hook/document';
 
 import { IDocumentFormDataLayersBlockPlaceDevice } from '@/hook/document/types/DocumentFormData';
 import upFirstLetterFormat from '@/utils/upFirstLetterFormat';
-import { api } from '@/services/api';
+import { internalApi } from '@/services/api';
 
 const DocumentEditorSideMenuBlockPlace: React.FC = () => {
   const router = useRouter();
@@ -101,20 +101,16 @@ const DocumentEditorSideMenuBlockPlace: React.FC = () => {
           data={{
             variant: 'single',
             fetch: async () => {
-              const response = await api.get<{ name: string }[]>(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              const response = await internalApi.get<{ name: string }[]>(
+                'documents',
                 { params: { type: 'place-room' } },
               );
 
               return response.data.map(i => ({ value: i.name }));
             },
             onAddFilter: async name => {
-              await api.post(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              await internalApi.post(
+                'documents',
                 { name },
                 { params: { type: 'place-room' } },
               );
@@ -130,20 +126,16 @@ const DocumentEditorSideMenuBlockPlace: React.FC = () => {
           data={{
             variant: 'single',
             fetch: async () => {
-              const response = await api.get<{ name: string }[]>(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              const response = await internalApi.get<{ name: string }[]>(
+                'documents',
                 { params: { type: 'place-floor' } },
               );
 
               return response.data.map(i => ({ value: i.name }));
             },
             onAddFilter: async name => {
-              await api.post(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              await internalApi.post(
+                'documents',
                 { name },
                 { params: { type: 'place-floor' } },
               );

@@ -15,7 +15,7 @@ import {
 import { IDropdownRef } from '@/components/Dropdown';
 import moneyFormat from '@/utils/moneyFormat';
 import romanFormat from '@/utils/romanFormat';
-import { api } from '@/services/api';
+import { internalApi } from '@/services/api';
 
 const DocumentEditorSideMenuBlock: React.FC = () => {
   const router = useRouter();
@@ -104,16 +104,16 @@ const DocumentEditorSideMenuBlock: React.FC = () => {
         data={{
           variant: 'single',
           fetch: async () => {
-            const response = await api.get<{ name: string }[]>(
-              `http://${process.browser && window.location.host}/api/documents`,
+            const response = await internalApi.get<{ name: string }[]>(
+              'documents',
               { params: { type: 'block-name' } },
             );
 
             return response.data.map(i => ({ value: i.name }));
           },
           onAddFilter: async name => {
-            await api.post(
-              `http://${process.browser && window.location.host}/api/documents`,
+            await internalApi.post(
+              `${internalApi}/documents`,
               { name },
               { params: { type: 'block-name' } },
             );
@@ -143,20 +143,16 @@ const DocumentEditorSideMenuBlock: React.FC = () => {
           data={{
             variant: 'array',
             fetch: async () => {
-              const response = await api.get<{ name: string }[]>(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              const response = await internalApi.get<{ name: string }[]>(
+                'documents',
                 { params: { type: 'materials' } },
               );
 
               return response.data.map(i => ({ value: i.name }));
             },
             onAddFilter: async name => {
-              await api.post(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              await internalApi.post(
+                'documents',
                 { name },
                 { params: { type: 'materials' } },
               );

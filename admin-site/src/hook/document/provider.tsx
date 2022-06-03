@@ -346,15 +346,17 @@ export const DocumentProvider: React.FC = ({ children }) => {
   );
 
   const blockInPageDefault = useCallback(
-    (layers: IDocumentFormDataLayers[]) => [
+    (layers: IDocumentFormDataLayers[]): IBlocksInPageItem[][] => [
       [
-        {
+        ...(
+          layers.filter(
+            item => item.type === 'block',
+          ) as IDocumentFormDataLayersBlock[]
+        ).map(item => ({
           height: 0,
           width: 0,
-          ...(layers.filter(
-            item => item.type === 'block',
-          )[0] as IDocumentFormDataLayersBlock),
-        },
+          ...item,
+        })),
         {
           height: 0,
           width: 0,
@@ -522,10 +524,10 @@ export const DocumentProvider: React.FC = ({ children }) => {
       await takePicAndSave();
     }
 
-    pdf.save();
+    pdf.save(documentData.title);
     await delay(1);
     setIsGeneratingPDF(false);
-  }, [previewPages]);
+  }, [documentData.title, previewPages.length]);
 
   const saveDocument = useCallback(() => {
     const updatedDocs = documents.find(doc => doc.id === documentData.id)
@@ -535,6 +537,25 @@ export const DocumentProvider: React.FC = ({ children }) => {
     localStorage.setItem(DOCUMENTS_STORAGE_KEY, JSON.stringify(updatedDocs));
     setDocuments(updatedDocs);
   }, [documents, documentData]);
+
+  const duplicateDocument = useCallback(
+    (id: string) => {
+      const updatedDocs = (() => {
+        const finded = documents.find(doc => doc.id === id);
+        return [
+          {
+            ...finded,
+            id: v4(),
+          },
+          ...documents,
+        ];
+      })();
+
+      localStorage.setItem(DOCUMENTS_STORAGE_KEY, JSON.stringify(updatedDocs));
+      setDocuments(updatedDocs);
+    },
+    [documents],
+  );
 
   const deleteDocument = useCallback(
     (id: string) => {
@@ -567,6 +588,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
         saveDocument,
         deleteDocument,
         clearEditor,
+        duplicateDocument,
         startEditor,
         documents,
         pdf: {
@@ -611,6 +633,11 @@ export const DocumentProvider: React.FC = ({ children }) => {
         },
       }}
     >
+      {isGeneratingPDF && (
+        <section className="absolute flex items-center justify-center w-full h-full bg-accent-6 z-50 opacity-95">
+          <p className="text-accent-0 text-4xl">Gerando o PDF...</p>
+        </section>
+      )}
       {children}
     </DocumentContext.Provider>
   );

@@ -1,13 +1,16 @@
 import React from 'react';
+import Head from 'next/head';
 
 import { Nav } from '@/components';
 
 import { DocumentListSideMenu } from '@/modules/Document/DocumentList';
 
-const Finance: React.FC = () => {
+const Documents: React.FC = () => {
   return (
     <>
-      <div />
+      <Head>
+        <title>Documentos</title>
+      </Head>
 
       <div className="flex max-h-screen">
         <Nav />
@@ -20,4 +23,4 @@ const Finance: React.FC = () => {
   );
 };
 
-export default Finance;
+export default Documents;

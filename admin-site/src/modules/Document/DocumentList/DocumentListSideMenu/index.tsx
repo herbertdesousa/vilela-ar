@@ -13,7 +13,8 @@ const DocumentListSideMenu: React.FC = () => {
   const router = useRouter();
 
   const { setValues } = useFormikContext<IDocumentFormData>();
-  const { documents, deleteDocument, startEditor } = useDocument();
+  const { documents, deleteDocument, startEditor, duplicateDocument } =
+    useDocument();
 
   const pushEditorPage = (item: IDocumentFormData) => {
     startEditor(item);
@@ -58,8 +59,11 @@ const DocumentListSideMenu: React.FC = () => {
                 icon: MdMoreVert,
                 dropdown: {
                   data: [
-                    { item: 'Duplicar', value: 'duplicate' },
-                    { item: 'Gerar PDF', value: 'pdf' },
+                    {
+                      item: 'Duplicar',
+                      value: 'duplicate',
+                      onSelect: () => duplicateDocument(item.id),
+                    },
                     {
                       item: <span className="text-red">Deletar</span>,
                       onSelect: () => deleteDocument(item.id),

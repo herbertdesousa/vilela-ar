@@ -38,7 +38,7 @@ const DatePickerComponent: React.FC<IDatePickerProps> = ({
       <DatePicker
         className="border border-accent-2 transition rounded py-2 px-4 w-full text-accent-6 mt-2"
         onChange={(date: Date) => helpers.setValue(date)}
-        selected={meta.value}
+        selected={new Date(meta.value)}
         dateFormat="dd/MM/yyyy"
         locale={ptBR}
       />

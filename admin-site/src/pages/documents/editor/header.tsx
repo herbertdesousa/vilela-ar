@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 
 import {
   DocumentEditorNav,
@@ -9,6 +10,10 @@ import { DocumentEditorSideMenuHeader } from '@/modules/Document/DocumentEditor/
 const EditorHeader: React.FC = () => {
   return (
     <>
+      <Head>
+        <title>Documentos Editor - Cabeçalho</title>
+      </Head>
+
       <DocumentEditorNav />
 
       <div className="flex" style={{ height: 'calc(100vh - 96px)' }}>

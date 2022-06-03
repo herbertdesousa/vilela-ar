@@ -32,6 +32,7 @@ export interface IDocumentContextData {
   documents: IDocumentFormData[];
   saveDocument: () => void;
   clearEditor: () => Promise<void>;
+  duplicateDocument: (id: string) => void;
   deleteDocument: (id: string) => void;
   startEditor: (data: IDocumentFormData) => void;
   pdf: {

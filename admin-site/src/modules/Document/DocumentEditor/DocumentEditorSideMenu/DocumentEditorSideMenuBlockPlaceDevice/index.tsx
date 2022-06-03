@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import {
-  IDocumentFormDataLayersBlock,
-  IDocumentFormDataLayersBlockPlace,
-  IDocumentFormDataLayersBlockPlaceDevice,
-} from '@/hook/document/types/DocumentFormData';
+import { IDocumentFormDataLayersBlock } from '@/hook/document/types/DocumentFormData';
 
 import { MdChevronLeft, MdDelete } from 'react-icons/md';
 import romanFormat from '@/utils/romanFormat';
@@ -13,7 +9,7 @@ import { BreadCrumb, Select, TextField } from '@/components';
 import onlyNumbersFormat from '@/utils/onlyNumbersFormat';
 
 import { useDocument } from '@/hook/document';
-import { api } from '@/services/api';
+import { internalApi } from '@/services/api';
 
 const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
   const router = useRouter();
@@ -120,20 +116,16 @@ const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
           data={{
             variant: 'single',
             fetch: async () => {
-              const response = await api.get<{ name: string }[]>(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              const response = await internalApi.get<{ name: string }[]>(
+                'documents',
                 { params: { type: 'device-type' } },
               );
 
               return response.data.map(i => ({ value: i.name }));
             },
             onAddFilter: async name => {
-              await api.post(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              await internalApi.post(
+                'documents',
                 { name },
                 { params: { type: 'device-type' } },
               );
@@ -149,20 +141,16 @@ const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
           data={{
             variant: 'single',
             fetch: async () => {
-              const response = await api.get<{ name: string }[]>(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              const response = await internalApi.get<{ name: string }[]>(
+                'documents',
                 { params: { type: 'device-mode' } },
               );
 
               return response.data.map(i => ({ value: i.name }));
             },
             onAddFilter: async name => {
-              await api.post(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              await internalApi.post(
+                'documents',
                 { name },
                 { params: { type: 'device-mode' } },
               );
@@ -178,20 +166,16 @@ const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
           data={{
             variant: 'single',
             fetch: async () => {
-              const response = await api.get<{ name: string }[]>(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              const response = await internalApi.get<{ name: string }[]>(
+                'documents',
                 { params: { type: 'device-brand' } },
               );
 
               return response.data.map(i => ({ value: i.name }));
             },
             onAddFilter: async name => {
-              await api.post(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              await internalApi.post(
+                'documents',
                 { name },
                 { params: { type: 'device-brand' } },
               );
@@ -207,20 +191,16 @@ const DocumentEditorSideMenuBlockPlaceDevice: React.FC = () => {
           data={{
             variant: 'single',
             fetch: async () => {
-              const response = await api.get<{ name: string }[]>(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              const response = await internalApi.get<{ name: string }[]>(
+                'documents',
                 { params: { type: 'device-capacity' } },
               );
 
               return response.data.map(i => ({ value: i.name }));
             },
             onAddFilter: async name => {
-              await api.post(
-                `http://${
-                  process.browser && window.location.host
-                }/api/documents`,
+              await internalApi.post(
+                'documents',
                 { name },
                 { params: { type: 'device-capacity' } },
               );
