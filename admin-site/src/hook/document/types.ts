@@ -49,6 +49,7 @@ export interface IDocumentContextData {
   type: string;
   show_company_info: boolean;
   add_bank_details_page: boolean;
+  show_signatures: boolean;
   title: string;
 
   layers: {

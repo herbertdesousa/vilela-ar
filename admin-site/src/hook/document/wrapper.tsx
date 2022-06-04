@@ -12,6 +12,7 @@ export const DOCUMENT_BLOCK_INITIALS: IDocumentFormData = {
   title: 'Sem Título',
   show_company_info: false,
   add_bank_details_page: false,
+  show_signatures: false,
   layers: [
     {
       id: v4(),

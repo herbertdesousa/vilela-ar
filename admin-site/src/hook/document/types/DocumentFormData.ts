@@ -4,6 +4,7 @@ export interface IDocumentFormData {
   title: string;
   add_bank_details_page: boolean;
   show_company_info: boolean;
+  show_signatures: boolean;
   layers: IDocumentFormDataLayers[];
 }
 export type IDocumentFormDataLayers =

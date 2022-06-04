@@ -372,6 +372,8 @@ export const DocumentProvider: React.FC = ({ children }) => {
     blockInPageDefault(documentData.layers),
   );
 
+  console.log(blocksInPage);
+
   useEffect(() => {
     documentData.layers.map(i => {
       if (i.type === 'block')
@@ -591,6 +593,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
         duplicateDocument,
         startEditor,
         show_company_info: documentData.show_company_info,
+        show_signatures: documentData.show_signatures,
         documents,
         pdf: {
           isGeneratingPDF,

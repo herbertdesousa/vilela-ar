@@ -77,6 +77,11 @@ const DocumentEditorSideMenuGeneral: React.FC = () => {
           label="Mostrar Dados da empresa"
           containerClassName="mt-4"
         />
+        <Checkbox
+          name="show_signatures"
+          label="Mostrar Local para Assinar"
+          containerClassName="mt-4"
+        />
         <ClosableList
           title="Camadas"
           containerClassName="mt-8"
