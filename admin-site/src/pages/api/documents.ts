@@ -7,6 +7,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
   const { type } = req.query as { type: string };
 
   const locales = [
+    'title',
     'block-name',
     'device-brand',
     'device-capacity',

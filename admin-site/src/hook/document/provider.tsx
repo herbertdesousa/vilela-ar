@@ -18,7 +18,6 @@ import {
   IDocumentFormDataLayersBlock,
   IDocumentFormDataLayersBlockPlace,
   IDocumentFormDataLayersBlockPlaceDevice,
-  IDocumentFormDataType,
 } from './types/DocumentFormData';
 import { DOCUMENT_BLOCK_INITIALS } from './wrapper';
 import { IBlocksInPageItem, IPreviewPages } from './types';
@@ -590,6 +589,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
         clearEditor,
         duplicateDocument,
         startEditor,
+        show_company_info: documentData.show_company_info,
         documents,
         pdf: {
           isGeneratingPDF,

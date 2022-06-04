@@ -5,6 +5,7 @@ import {
   Checkbox,
   ClosableList,
   ListItem,
+  Select,
   Switch,
   TextField,
 } from '@/components';
@@ -12,6 +13,7 @@ import { MdLock, MdMoreVert } from 'react-icons/md';
 import { useDocument } from '@/hook/document';
 
 import { IDocumentFormDataLayers } from '@/hook/document/types/DocumentFormData';
+import { internalApi } from '@/services/api';
 
 const DocumentEditorSideMenuGeneral: React.FC = () => {
   const { push } = useRouter();
@@ -35,13 +37,27 @@ const DocumentEditorSideMenuGeneral: React.FC = () => {
       <h1 className="font-merriweather text-4xl font-bold">Documento</h1>
 
       <div className="mt-10">
-        <Switch
+        <Select
           name="type"
           label="Tipo"
           isRequired
           data={{
-            option1: { label: 'Recibo', value: 'recibo' },
-            option2: { label: 'Orçamento', value: 'orçamento' },
+            variant: 'single',
+            fetch: async () => {
+              const response = await internalApi.get<{ name: string }[]>(
+                'documents',
+                { params: { type: 'title' } },
+              );
+
+              return response.data.map(i => ({ value: i.name }));
+            },
+            onAddFilter: async name => {
+              await internalApi.post(
+                'documents',
+                { name },
+                { params: { type: 'title' } },
+              );
+            },
           }}
         />
         <TextField
@@ -54,6 +70,11 @@ const DocumentEditorSideMenuGeneral: React.FC = () => {
         <Checkbox
           name="add_bank_details_page"
           label="Adicionar Página de Dados Bancários"
+          containerClassName="mt-4"
+        />
+        <Checkbox
+          name="show_company_info"
+          label="Mostrar Dados da empresa"
           containerClassName="mt-4"
         />
         <ClosableList

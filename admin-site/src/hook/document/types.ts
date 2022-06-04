@@ -4,7 +4,6 @@ import {
   IDocumentFormDataLayersPayment,
   IDocumentFormDataLayersBlockPlace,
   IDocumentFormDataLayersBlockPlaceDevice,
-  IDocumentFormDataType,
   IDocumentFormData,
 } from './types/DocumentFormData';
 
@@ -47,7 +46,8 @@ export interface IDocumentContextData {
     changePage(pageName: string): void;
   };
 
-  type: IDocumentFormDataType;
+  type: string;
+  show_company_info: boolean;
   add_bank_details_page: boolean;
   title: string;
 

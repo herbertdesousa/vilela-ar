@@ -10,6 +10,7 @@ export const DOCUMENT_BLOCK_INITIALS: IDocumentFormData = {
   id: v4(),
   type: 'orçamento',
   title: 'Sem Título',
+  show_company_info: false,
   add_bank_details_page: false,
   layers: [
     {

@@ -1,9 +1,9 @@
-export type IDocumentFormDataType = 'recibo' | 'orçamento';
 export interface IDocumentFormData {
   id: string;
-  type: IDocumentFormDataType;
+  type: string;
   title: string;
   add_bank_details_page: boolean;
+  show_company_info: boolean;
   layers: IDocumentFormDataLayers[];
 }
 export type IDocumentFormDataLayers =

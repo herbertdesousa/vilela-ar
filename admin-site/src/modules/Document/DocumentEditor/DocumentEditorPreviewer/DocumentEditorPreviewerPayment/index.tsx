@@ -20,7 +20,7 @@ interface IDocumentEditorPreviewerPaymentProps {
 const DocumentEditorPreviewerPayment: React.FC<
   IDocumentEditorPreviewerPaymentProps
 > = ({ block }) => {
-  const { layers } = useDocument();
+  const { layers, show_company_info } = useDocument();
   const router = useRouter();
 
   const payment = layers.value.filter(
@@ -59,8 +59,18 @@ const DocumentEditorPreviewerPayment: React.FC<
   return (
     <div
       ref={containerMeasuresRef.ref}
-      className="absolute bottom-6 right-10 w-full flex justify-end"
+      className="flex absolute bottom-6 w-full justify-between items-center pr-10"
+      style={{ width: 'calc(100% - 40px)' }}
     >
+      <div className="text-xs">
+        {show_company_info && (
+          <>
+            <span>CNPJ: 29.429.191/0001-93</span>
+            <br />
+            <span>Dono: José Aparecido Vilela</span>
+          </>
+        )}
+      </div>
       <div
         role="button"
         tabIndex={0}

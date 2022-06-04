@@ -84,11 +84,13 @@ const DocumentEditorPreviewerHeader: React.FC<
         <img src="/logo.svg" alt="logo" className="w-12 h-12" />
       </div>
       <div className="w-1/2">
-        <div className="flex items-end">
+        <div className="whitespace-pre-wrap">
           <h1 className="font-merriweather text-2xl font-bold">
             {upFirstLetterFormat(type)}
+            <span className="text-xs ml-2 mb-1 font-inter text-accent-4 font-normal">
+              {formatHeaderDate}
+            </span>
           </h1>
-          <p className="text-xs ml-2 mb-1">{formatHeaderDate}</p>
         </div>
 
         <div
