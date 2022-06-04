@@ -34,7 +34,7 @@ const PREVIEW_PAGES_DEFAULT = [
 
 const order = (
   arr: IBlocksInPageItem[],
-  limit: number,
+  { firstLimit, restLimit }: { firstLimit: number; restLimit: number },
 ): IBlocksInPageItem[][] => {
   const result: IBlocksInPageItem[][] = [];
   const currentIndex = { current: 0 };
@@ -49,6 +49,7 @@ const order = (
       .map(i => i.height)
       .reduce((a, b) => a + b);
 
+    const limit = currentIndex.current === 0 ? firstLimit : restLimit;
     if (item.height + sum < limit + 1) {
       result[currentIndex.current].push(item);
     } else {
@@ -437,7 +438,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
     };
 
     setBlocksInPage(st => {
-      const pageHeight = 400;
+      const pageLimit = { firstLimit: 400, restLimit: 600 };
       if (st.find(page => page.find(block => block.id === payload.id))) {
         const updated = st.map(page =>
           page.map(block =>
@@ -453,7 +454,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
 
         const updatedBlocks = order(
           updated.flat().sort((a: any, b: any) => a.order - b.order),
-          pageHeight,
+          pageLimit,
         );
 
         savePreviewPages(updatedBlocks);
@@ -466,7 +467,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
           ...st.flat().map(i => ({ ...i, height: i.height || 48 })),
           { ...payload, height: payload.height || 48 },
         ].sort((a: any, b: any) => a.order - b.order),
-        pageHeight,
+        pageLimit,
       );
 
       savePreviewPages(updatedBlocks);
