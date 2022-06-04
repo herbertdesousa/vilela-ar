@@ -40,12 +40,17 @@ const DocumentEditorSideMenuBlockPlace: React.FC = () => {
     });
   };
 
+  const onDeleteItem = () => {
+    layers.places.remove(blockId, blockPlaceId);
+    backToBlock();
+  };
+
   const isRouteValid =
     layers.value[blockIndex] || (layers.value[blockPlaceIndex] as any)?.places;
 
   useEffect(() => {
     if (!isRouteValid) router.push('/documents/editor');
-  }, [isRouteValid]);
+  }, [isRouteValid, router]);
 
   if (!isRouteValid) {
     return <></>;
@@ -67,10 +72,7 @@ const DocumentEditorSideMenuBlockPlace: React.FC = () => {
         <button
           type="button"
           className="flex items-center text-accent-6 font-medium"
-          onClick={() => {
-            layers.places.remove(blockId, blockPlaceId);
-            backToBlock();
-          }}
+          onClick={onDeleteItem}
         >
           <MdDelete size={20} className="mr-1 text-red" />
           Deletar
@@ -147,8 +149,9 @@ const DocumentEditorSideMenuBlockPlace: React.FC = () => {
           containerClassName="mt-8"
           onAddBlock={() => layers.places.devices.add(blockId, blockPlaceId)}
           list={{
-            data: (layers.value[blockIndex] as any).places[blockPlaceIndex]
-              .devices,
+            data:
+              (layers.value[blockIndex] as any).places[blockPlaceIndex]
+                ?.devices || [],
             renderItem: (
               item: IDocumentFormDataLayersBlockPlaceDevice,
               idx,
