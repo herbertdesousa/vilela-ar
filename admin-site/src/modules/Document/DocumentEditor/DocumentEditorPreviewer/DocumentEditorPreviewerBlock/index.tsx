@@ -94,12 +94,11 @@ const DocumentEditorPreviewerBlocks: React.FC<
   }, [router.pathname]);
 
   return (
-    <div className={`${blockIndex !== 0 ? 'pt-4' : ''}`}>
+    <div ref={containerMeasuresRef.ref}>
       <div
-        ref={containerMeasuresRef.ref}
         role="button"
-        className="relative"
         tabIndex={0}
+        className={`relative ${blockIndex !== 0 ? 'pt-4' : ''}`}
         onClick={() => pushBlockPage(block.id)}
         onKeyDown={() => pushBlockPage(block.id)}
         style={{
