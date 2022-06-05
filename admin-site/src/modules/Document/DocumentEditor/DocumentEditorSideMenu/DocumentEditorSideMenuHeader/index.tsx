@@ -75,6 +75,12 @@ const DocumentEditorSideMenuHeader: React.FC = () => {
         containerClassName="w-full mt-4"
         placeholder="Nome do engenheiro"
       />
+      <TextField
+        name="layers[0].representative_architect"
+        label="Arquiteto"
+        containerClassName="w-full mt-4"
+        placeholder="Nome do arquiteto"
+      />
       <ClosableList title="Cliente" containerClassName="mt-8">
         <TextField
           name="layers[0].customer.name"

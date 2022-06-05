@@ -110,15 +110,25 @@ const DocumentEditorPreviewerHeader: React.FC<
             <strong>CPF/CNPJ:</strong>
             <span>{header.customer.document || '-'}</span>
           </div>
-          <div className="flex w-full mt-2">
-            <div className="w-1/2 flex flex-col text-xs">
-              <strong>Representante:</strong>
-              <span>{header.customer.representative || '-'}</span>
-            </div>
-            <div className="w-1/2 flex flex-col text-xs">
-              <strong>Engenheiro:</strong>
-              <span>{header.representative_engineer || '-'}</span>
-            </div>
+          <div className="flex w-full mt-2 justify-between">
+            {header.customer.representative && (
+              <div className="flex flex-col text-xs">
+                <strong>Representante:</strong>
+                <span>{header.customer.representative || '-'}</span>
+              </div>
+            )}
+            {header.representative_engineer && (
+              <div className="flex flex-col text-xs">
+                <strong>Engenheiro:</strong>
+                <span>{header.representative_engineer || '-'}</span>
+              </div>
+            )}
+            {header.representative_architect && (
+              <div className="flex flex-col text-xs">
+                <strong>Arquiteto:</strong>
+                <span>{header.representative_architect || '-'}</span>
+              </div>
+            )}
           </div>
           <div className="flex flex-col text-xs mt-2">
             <strong>Endereço:</strong>

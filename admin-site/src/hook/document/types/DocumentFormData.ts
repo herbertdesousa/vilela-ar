@@ -21,6 +21,7 @@ export type IDocumentFormDataLayersHeader = {
 
   date: Date;
   representative_engineer: string;
+  representative_architect: string;
   customer: {
     name: string;
     document: string;

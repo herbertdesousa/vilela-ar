@@ -21,6 +21,7 @@ export const DOCUMENT_BLOCK_INITIALS: IDocumentFormData = {
       isLock: true,
       date: new Date(Date.now()),
       representative_engineer: '',
+      representative_architect: '',
       order: -100000,
       customer: {
         name: '',
