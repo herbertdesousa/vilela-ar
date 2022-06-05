@@ -64,7 +64,6 @@ const DocumentEditorSideMenuGeneral: React.FC = () => {
           name="title"
           label="Nome do Documento"
           isRequired
-          disabled
           containerClassName="mt-4"
         />
         <Checkbox

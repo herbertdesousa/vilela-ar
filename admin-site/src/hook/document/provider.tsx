@@ -10,6 +10,7 @@ import { v4 } from 'uuid';
 
 import upFirstLetterFormat from '@/utils/upFirstLetterFormat';
 
+import { useRouter } from 'next/router';
 import { DocumentContext } from './context';
 import {
   IDocumentFormData,
@@ -77,6 +78,7 @@ export const DocumentProvider: React.FC = ({ children }) => {
     resetForm,
     setValues,
   } = useFormikContext<IDocumentFormData>();
+  const router = useRouter();
 
   const [documents, setDocuments] = useState<IDocumentFormData[]>(() => {
     if (!process.browser) return [];
@@ -372,8 +374,6 @@ export const DocumentProvider: React.FC = ({ children }) => {
     blockInPageDefault(documentData.layers),
   );
 
-  console.log(blocksInPage);
-
   useEffect(() => {
     documentData.layers.map(i => {
       if (i.type === 'block')
@@ -487,6 +487,9 @@ export const DocumentProvider: React.FC = ({ children }) => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const generatePDF = useCallback(async () => {
+    router.push('/documents/editor');
+    await delay(1);
+
     setIsGeneratingPDF(true);
 
     const pdf = new JsPDF('p', 'px', '', true);
