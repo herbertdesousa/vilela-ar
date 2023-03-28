@@ -33,33 +33,11 @@ const DocumentEditorPreviewerBankDetails: React.FC = () => {
             </p>
             <p>
               <span className="underline">Agência</span>
-              :&nbsp;0088
+              :&nbsp;1043
             </p>
             <p>
               <span className="underline">Conta</span>
-              :&nbsp;Bradesco C.C. 0610106.2
-            </p>
-          </div>
-        </div>
-        <div className="mt-8 ml-12">
-          <h3 className="text-base font-semibold">Itaú</h3>
-
-          <div className="mt-1 text-xs font-medium">
-            <p>
-              <span className="underline">Nome</span>
-              :&nbsp;José Aparecido Vilela
-            </p>
-            <p>
-              <span className="underline">CPF</span>
-              :&nbsp;033.448.179-14
-            </p>
-            <p>
-              <span className="underline">Agência</span>
-              :&nbsp;0771
-            </p>
-            <p>
-              <span className="underline">Conta</span>
-              :&nbsp;Itaú C. C. 23648.6
+              :&nbsp;Bradesco C.C. 0705106.9
             </p>
           </div>
         </div>
