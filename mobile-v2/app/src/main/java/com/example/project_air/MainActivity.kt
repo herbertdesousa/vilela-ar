@@ -15,12 +15,14 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class SignUpEmailInUseException() : Exception()
 class SignInInvalidCredentialsException() : Exception()
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
   private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
