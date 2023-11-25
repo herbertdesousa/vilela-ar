@@ -32,7 +32,6 @@ fun AuthSignInScreen(
   var errors by remember { mutableStateOf("") }
 
   LaunchedEffect(Unit) {
-    println("init")
     authViewModel.isUserLoggedIn { isLoggedIn ->
       if (isLoggedIn) navController.navigate(Route.AppHome.route)
     }
