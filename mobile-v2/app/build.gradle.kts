@@ -76,6 +76,9 @@ dependencies {
   implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
   kapt("androidx.hilt:hilt-compiler:1.1.0")
 
+  // rxjava
+  implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
+
   // testing
   testImplementation("junit:junit:4.13.2")
   androidTestImplementation("androidx.test.ext:junit:1.1.5")

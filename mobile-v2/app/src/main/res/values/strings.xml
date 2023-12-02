@@ -3,4 +3,5 @@
     <string name="web_client_id">203222232928-flbm0mv5l9n04b10nlcvv19nhurednbt.apps.googleusercontent.com</string>
     <string name="sign_in_button_title">Entrar</string>
     <string name="signout_button_title">Sair</string>
+    <string name="auth_signin_screen_title">Entrar</string>
 </resources>
