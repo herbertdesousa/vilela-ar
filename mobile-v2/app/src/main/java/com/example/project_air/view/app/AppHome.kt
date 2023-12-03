@@ -25,13 +25,6 @@ fun AppHome(
   navController: NavHostController,
   authViewModel: AuthViewModel = hiltViewModel()
 ) {
-  LaunchedEffect(true) {
-    authViewModel.eventFlow.collectLatest { event ->
-      when (event) {
-        is UIEvent.NavigateEvent -> navController.navigate(event.route)
-      }
-    }
-  }
 
   Scaffold { innerPadding ->
     Column(
