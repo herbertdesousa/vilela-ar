@@ -7,6 +7,8 @@ import {
   MdRoom,
 } from 'react-icons/md';
 
+import { ListItem } from '../components';
+
 type Document = {
   id: string;
   type: 'RECEIPT' | 'BUDGET';
@@ -72,57 +74,41 @@ export function Home() {
 
       <ul className="flex flex-col gap-y-2">
         {DATA.map((i) => (
-          <li key={i.id}>
-            <button
-              type="button"
-              className="items-start text-start rounded border border-slate-200 bg-white flex w-full flex-col px-4 py-3 gap-y-4 shadow-sm"
-            >
-              <div className="justify-between self-stretch flex gap-5 py-0.5 w-full">
-                <div className="flex flex-col overflow-hidden">
-                  <strong className="text-slate-900 text-lg font-medium grow whitespace-nowrap text-ellipsis overflow-hidden">
-                    {`${DOCUMENT_TYPE_TRANSLATOR[i.type]} - ${i.customer.name}`}
-                  </strong>
-                  <div className="text-slate-500 text-sm">
-                    {formatDate(i.executed_at)}
-                  </div>
-                </div>
+          <ListItem.Root>
+            <ListItem.Header
+              title={`${DOCUMENT_TYPE_TRANSLATOR[i.type]} - ${i.customer.name}`}
+              subTitle={formatDate(i.executed_at)}
+            />
 
-                <MdChevronRight
-                  size={24}
-                  className="text-slate-500 min-w-[24px]"
+            <div className="flex flex-col gap-y-1.5 overflow-hidden w-full">
+              <div className="justify-start items-stretch self-stretch flex gap-2">
+                <MdPerson size={18} className="text-slate-500 min-w-[18px]" />
+
+                <div className="text-slate-900 text-sm truncate text-start">
+                  {i.customer.name}
+                </div>
+              </div>
+
+              <div className="justify-start items-stretch self-stretch flex gap-2">
+                <MdRoom size={18} className="text-slate-500 min-w-[18px]" />
+
+                <p className="text-slate-900 text-sm truncate text-start">
+                  {`${i.address.street_name}, ${i.address.neighborhood}, ${i.address.city} - ${i.address.state} - CEP ${i.address.zip_code}`}
+                </p>
+              </div>
+
+              <div className="justify-start items-stretch self-stretch flex gap-2">
+                <MdAttachMoney
+                  size={18}
+                  className="text-slate-500 min-w-[18px]"
                 />
+
+                <p className="text-slate-900 text-sm truncate text-start">
+                  R$ 1.000
+                </p>
               </div>
-
-              <div className="flex flex-col gap-y-1.5 overflow-hidden w-full">
-                <div className="justify-start items-stretch self-stretch flex gap-2">
-                  <MdPerson size={18} className="text-slate-500 min-w-[18px]" />
-
-                  <div className="text-slate-900 text-sm truncate text-start">
-                    {i.customer.name}
-                  </div>
-                </div>
-
-                <div className="justify-start items-stretch self-stretch flex gap-2">
-                  <MdRoom size={18} className="text-slate-500 min-w-[18px]" />
-
-                  <p className="text-slate-900 text-sm truncate text-start">
-                    {`${i.address.street_name}, ${i.address.neighborhood}, ${i.address.city} - ${i.address.state} - CEP ${i.address.zip_code}`}
-                  </p>
-                </div>
-
-                <div className="justify-start items-stretch self-stretch flex gap-2">
-                  <MdAttachMoney
-                    size={18}
-                    className="text-slate-500 min-w-[18px]"
-                  />
-
-                  <p className="text-slate-900 text-sm truncate text-start">
-                    R$ 1.000
-                  </p>
-                </div>
-              </div>
-            </button>
-          </li>
+            </div>
+          </ListItem.Root>
         ))}
       </ul>
 
