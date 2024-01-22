@@ -1,2 +1,2 @@
-export * as ListItem from './ListItem/ListItem';
+export * as List from './List/List';
 export { StepIndicator } from './StepIndicator';

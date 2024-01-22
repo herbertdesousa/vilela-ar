@@ -1,13 +1,7 @@
 import { differenceInDays, subDays } from 'date-fns';
-import {
-  MdAdd,
-  MdAttachMoney,
-  MdChevronRight,
-  MdPerson,
-  MdRoom,
-} from 'react-icons/md';
+import { MdAttachMoney, MdPerson, MdRoom } from 'react-icons/md';
 
-import { ListItem } from '../components';
+import { List } from '../components';
 import { FloatButton } from '../components/FloatButton';
 
 type Document = {
@@ -73,10 +67,10 @@ export function Home() {
         <p className="text-blue-600">2 Itens</p>
       </div>
 
-      <ul className="flex flex-col gap-y-2">
+      <List.Root>
         {DATA.map((i) => (
-          <ListItem.Root>
-            <ListItem.Header
+          <List.Item>
+            <List.ItemHeader
               title={`${DOCUMENT_TYPE_TRANSLATOR[i.type]} - ${i.customer.name}`}
               subTitle={formatDate(i.executed_at)}
             />
@@ -109,9 +103,9 @@ export function Home() {
                 </p>
               </div>
             </div>
-          </ListItem.Root>
+          </List.Item>
         ))}
-      </ul>
+      </List.Root>
 
       <FloatButton />
     </div>

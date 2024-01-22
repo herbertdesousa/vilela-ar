@@ -1,6 +1,6 @@
 import { MdAdd, MdClose } from 'react-icons/md';
 
-import { ListItem, StepIndicator } from '../components';
+import { List, StepIndicator } from '../components';
 
 export function Document() {
   return (
@@ -25,13 +25,13 @@ export function Document() {
           Nova Sala
         </button>
 
-        <ul className="flex flex-col gap-y-2">
+        <List.Root>
           {[1, 2, 3].map((i) => (
-            <ListItem.Root key={i}>
-              <ListItem.Header title="Escritório" subTitle="2 Aparelhos" />
-            </ListItem.Root>
+            <List.Item key={i}>
+              <List.ItemHeader title="Escritório" subTitle="2 Aparelhos" />
+            </List.Item>
           ))}
-        </ul>
+        </List.Root>
       </div>
     </div>
   );

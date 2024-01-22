@@ -3,7 +3,7 @@ type Props = {
   variant?: 'regular' | 'unselected' | 'selected';
 };
 
-export function ListItemRoot({ children }: Props) {
+export function ListItem({ children }: Props) {
   return (
     <li>
       <button
