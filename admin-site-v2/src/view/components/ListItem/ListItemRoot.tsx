@@ -8,7 +8,7 @@ export function ListItemRoot({ children }: Props) {
     <li>
       <button
         type="button"
-        className="items-start text-start rounded border border-slate-200 bg-white flex w-full flex-col px-4 py-3 gap-y-4 shadow-sm"
+        className="items-start text-start rounded border border-slate-200 bg-white flex w-full flex-col px-4 py-2 gap-y-4 shadow-sm"
       >
         {children}
       </button>
