@@ -8,6 +8,7 @@ import {
 } from 'react-icons/md';
 
 import { ListItem } from '../components';
+import { FloatButton } from '../components/FloatButton';
 
 type Document = {
   id: string;
@@ -112,12 +113,7 @@ export function Home() {
         ))}
       </ul>
 
-      <button
-        type="button"
-        className="fixed bottom-8 right-4 flex text-white text-2xl justify-center items-center bg-blue-600 aspect-square h-14 rounded-[64px]"
-      >
-        <MdAdd size={24} />
-      </button>
+      <FloatButton />
     </div>
   );
 }
