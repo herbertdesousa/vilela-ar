@@ -1,6 +1,7 @@
-import { MdAdd, MdClose } from 'react-icons/md';
+import { MdAdd, MdChevronRight, MdClose } from 'react-icons/md';
 
 import { List, StepIndicator } from '../components';
+import { FloatButton } from '../components/FloatButton';
 
 export function Document() {
   return (
@@ -33,6 +34,8 @@ export function Document() {
           ))}
         </List.Root>
       </div>
+
+      <FloatButton Icon={MdChevronRight} />
     </div>
   );
 }
