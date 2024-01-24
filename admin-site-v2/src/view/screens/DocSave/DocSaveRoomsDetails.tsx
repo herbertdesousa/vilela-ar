@@ -48,6 +48,15 @@ export function DocSaveRoomsDetails() {
           ))}
         </ul>
       </div>
+
+      <div className="w-full h-px bg-slate-300"></div>
+
+      <Button.Root variant="outline">
+        <Button.Icon Icon={MdAdd} variant="error" />
+        <Button.Text variant="inhert">
+          Excluir <u>Escritório</u>
+        </Button.Text>
+      </Button.Root>
     </main>
   );
 }
