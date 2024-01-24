@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { List } from '../components';
 import { FloatButton } from '../components/FloatButton';
+import { ROUTES } from '../utils/Routes';
 
 type Document = {
   id: string;
@@ -60,7 +61,7 @@ function formatDate(date: Date): string {
   else return `Há ${diff} dias atrás`;
 }
 
-export function Documents() {
+export function Docs() {
   return (
     <div className="flex flex-col px-4 py-8 gap-y-8">
       <div className="flex flex-col gap-y-0.5">
@@ -70,7 +71,10 @@ export function Documents() {
 
       <List.Root>
         {DATA.map((i) => (
-          <Link key={i.id} to={`/documents/${i.id}`}>
+          <Link
+            key={i.id}
+            to={ROUTES.DOCUMENTS.SAVE_ROOMS.buildPath({ document_id: i.id })}
+          >
             <List.Item>
               <List.ItemHeader
                 title={`${DOCUMENT_TYPE_TRANSLATOR[i.type]} - ${i.customer.name}`}
