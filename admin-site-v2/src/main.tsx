@@ -3,10 +3,10 @@ import './view/global.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { Document } from './view/screens/Document.tsx';
+import { Router } from './view/screens/Router';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Document />
+    <Router />
   </React.StrictMode>,
 );

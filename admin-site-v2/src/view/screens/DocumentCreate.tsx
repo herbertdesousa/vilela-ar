@@ -1,15 +1,16 @@
 import { MdAdd, MdChevronRight, MdClose } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 import { List, StepIndicator } from '../components';
 import { FloatButton } from '../components/FloatButton';
 
-export function Document() {
+export function DocumentCreate() {
   return (
     <div className="flex flex-col px-4 py-8 gap-y-8">
-      <button type="button" className="flex items-center gap-x-3 font-medium">
+      <Link to="/documents" className="flex items-center gap-x-3 font-medium">
         <MdClose size={16} className="text-slate-500" />
         Sair do Documento
-      </button>
+      </Link>
 
       <StepIndicator
         activeStepIndex={0}

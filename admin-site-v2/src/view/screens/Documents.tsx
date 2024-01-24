@@ -1,5 +1,6 @@
 import { differenceInDays, subDays } from 'date-fns';
 import { MdAttachMoney, MdPerson, MdRoom } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 import { List } from '../components';
 import { FloatButton } from '../components/FloatButton';
@@ -59,51 +60,53 @@ function formatDate(date: Date): string {
   else return `Há ${diff} dias atrás`;
 }
 
-export function Home() {
+export function Documents() {
   return (
     <div className="flex flex-col px-4 py-8 gap-y-8">
       <div className="flex flex-col gap-y-0.5">
         <h1 className="text-xl font-semibold">Documentos</h1>
-        <p className="text-blue-600">2 Itens</p>
+        <p className="text-blue-600">{DATA.length} Itens</p>
       </div>
 
       <List.Root>
         {DATA.map((i) => (
-          <List.Item>
-            <List.ItemHeader
-              title={`${DOCUMENT_TYPE_TRANSLATOR[i.type]} - ${i.customer.name}`}
-              subTitle={formatDate(i.executed_at)}
-            />
+          <Link key={i.id} to={`/documents/${i.id}`}>
+            <List.Item>
+              <List.ItemHeader
+                title={`${DOCUMENT_TYPE_TRANSLATOR[i.type]} - ${i.customer.name}`}
+                subTitle={formatDate(i.executed_at)}
+              />
 
-            <div className="flex flex-col gap-y-1.5 overflow-hidden w-full">
-              <div className="justify-start items-stretch self-stretch flex gap-2">
-                <MdPerson size={18} className="text-slate-500 min-w-[18px]" />
+              <div className="flex flex-col gap-y-1.5 overflow-hidden w-full">
+                <div className="justify-start items-stretch self-stretch flex gap-2">
+                  <MdPerson size={18} className="text-slate-500 min-w-[18px]" />
 
-                <div className="text-slate-900 text-sm truncate text-start">
-                  {i.customer.name}
+                  <div className="text-slate-900 text-sm truncate text-start">
+                    {i.customer.name}
+                  </div>
+                </div>
+
+                <div className="justify-start items-stretch self-stretch flex gap-2">
+                  <MdRoom size={18} className="text-slate-500 min-w-[18px]" />
+
+                  <p className="text-slate-900 text-sm truncate text-start">
+                    {`${i.address.street_name}, ${i.address.neighborhood}, ${i.address.city} - ${i.address.state} - CEP ${i.address.zip_code}`}
+                  </p>
+                </div>
+
+                <div className="justify-start items-stretch self-stretch flex gap-2">
+                  <MdAttachMoney
+                    size={18}
+                    className="text-slate-500 min-w-[18px]"
+                  />
+
+                  <p className="text-slate-900 text-sm truncate text-start">
+                    R$ 1.000
+                  </p>
                 </div>
               </div>
-
-              <div className="justify-start items-stretch self-stretch flex gap-2">
-                <MdRoom size={18} className="text-slate-500 min-w-[18px]" />
-
-                <p className="text-slate-900 text-sm truncate text-start">
-                  {`${i.address.street_name}, ${i.address.neighborhood}, ${i.address.city} - ${i.address.state} - CEP ${i.address.zip_code}`}
-                </p>
-              </div>
-
-              <div className="justify-start items-stretch self-stretch flex gap-2">
-                <MdAttachMoney
-                  size={18}
-                  className="text-slate-500 min-w-[18px]"
-                />
-
-                <p className="text-slate-900 text-sm truncate text-start">
-                  R$ 1.000
-                </p>
-              </div>
-            </div>
-          </List.Item>
+            </List.Item>
+          </Link>
         ))}
       </List.Root>
 
