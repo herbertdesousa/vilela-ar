@@ -1,20 +1,24 @@
-import { MdAdd, MdChevronRight, MdClose } from 'react-icons/md';
+import { MdAdd, MdChevronRight } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useTypedParams } from 'react-router-typesafe-routes/dom';
 
-import { Button, List, StepIndicator } from '../../components';
-import { FloatButton } from '../../components/FloatButton';
-import { ROUTES } from '../../utils/Routes';
+import {
+  BackLink,
+  Button,
+  FloatButton,
+  List,
+  StepIndicator,
+} from '@/view/components';
+import { ROUTES } from '@/view/utils/Routes';
 
 export function DocSaveRooms() {
   const { document_id } = useTypedParams(ROUTES.DOCUMENTS.SAVE_ROOMS);
 
   return (
-    <div className="flex flex-col px-4 py-8 gap-y-8">
-      <Link to="/documents" className="flex items-center gap-x-3 font-medium">
-        <MdClose size={16} className="text-slate-500" />
+    <main className="flex flex-col px-4 py-8 gap-y-8">
+      <BackLink to="/documents" variant="exit">
         Sair do Documento
-      </Link>
+      </BackLink>
 
       <StepIndicator
         activeStepIndex={0}
@@ -53,6 +57,6 @@ export function DocSaveRooms() {
       </div>
 
       <FloatButton Icon={MdChevronRight} />
-    </div>
+    </main>
   );
 }

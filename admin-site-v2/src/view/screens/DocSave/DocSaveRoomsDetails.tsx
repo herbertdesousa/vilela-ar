@@ -1,8 +1,8 @@
-import { MdAdd, MdClose, MdEdit } from 'react-icons/md';
+import { MdAdd, MdEdit } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useTypedParams } from 'react-router-typesafe-routes/dom';
 
-import { Button, List } from '@/view/components';
+import { BackLink, Button, List } from '@/view/components';
 import { ROUTES } from '@/view/utils/Routes';
 
 export function DocSaveRoomsDetails() {
@@ -10,15 +10,11 @@ export function DocSaveRoomsDetails() {
 
   return (
     <main className="flex flex-col px-4 py-8 gap-y-8">
-      <Link
-        to={ROUTES.DOCUMENTS.SAVE_ROOMS.buildPath({ document_id })}
-        className="flex items-center gap-x-3 font-medium"
-      >
-        <MdClose size={16} className="text-slate-500" />
+      <BackLink to={ROUTES.DOCUMENTS.SAVE_ROOMS.buildPath({ document_id })}>
         <span>
           Voltar Para <u>Salas</u>
         </span>
-      </Link>
+      </BackLink>
 
       <Button.Root variant="outline" size="4/3" display="between">
         <Button.Text variant="inhert">Escritório</Button.Text>
