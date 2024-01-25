@@ -3,7 +3,7 @@ import { IconType } from 'react-icons';
 
 type Props = {
   Icon: IconType;
-  variant?: 'primary' | 'edit' | 'over-primary' | 'error';
+  variant?: 'primary' | 'edit' | 'over-primary' | 'error' | 'dark';
 };
 
 export function ButtonIcon({ Icon, variant = 'over-primary' }: Props) {
@@ -15,6 +15,7 @@ export function ButtonIcon({ Icon, variant = 'over-primary' }: Props) {
         variant === 'edit' && 'text-green-800',
         variant === 'over-primary' && 'text-white',
         variant === 'error' && 'text-red-700',
+        variant === 'dark' && 'text-slate-600',
       )}
     />
   );

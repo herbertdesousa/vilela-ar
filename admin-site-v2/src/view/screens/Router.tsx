@@ -4,6 +4,7 @@ import { ROUTES } from '../utils/Routes';
 import { Docs } from './Docs';
 import { DocSaveRooms } from './DocSave/DocSaveRooms';
 import { DocSaveRoomsDetails } from './DocSave/DocSaveRoomsDetails';
+import { DocSaveRoomsDetailsDevice } from './DocSave/DocSaveRoomsDetailsDevice';
 
 export function Router() {
   return (
@@ -24,6 +25,10 @@ export function Router() {
         <Route
           path={ROUTES.DOCUMENTS.SAVE_ROOMS.DETAILS.path}
           Component={DocSaveRoomsDetails}
+        />
+        <Route
+          path={ROUTES.DOCUMENTS.SAVE_ROOMS.DETAILS.DEVICE.path}
+          Component={DocSaveRoomsDetailsDevice}
         />
       </Routes>
     </BrowserRouter>

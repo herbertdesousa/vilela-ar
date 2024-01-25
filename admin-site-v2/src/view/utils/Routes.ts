@@ -6,15 +6,18 @@ export const ROUTES = {
     {},
     {
       SAVE_ROOMS: RRTS.route(
-        ':document_id/rooms',
+        'rooms',
         { params: { document_id: RRTS.string().defined() } },
         {
-          DETAILS: RRTS.route(':document_id/rooms/:room_id', {
-            params: {
-              document_id: RRTS.string().defined(),
-              room_id: RRTS.string().defined(),
+          DETAILS: RRTS.route(
+            ':room_id',
+            { params: { room_id: RRTS.string().defined() } },
+            {
+              DEVICE: RRTS.route(':device_id', {
+                params: { device_id: RRTS.string().defined() },
+              }),
             },
-          }),
+          ),
         },
       ),
     },

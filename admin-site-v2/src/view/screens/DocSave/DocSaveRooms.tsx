@@ -1,6 +1,5 @@
 import { MdAdd, MdChevronRight } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import { useTypedParams } from 'react-router-typesafe-routes/dom';
 
 import {
   BackLink,
@@ -12,8 +11,6 @@ import {
 import { ROUTES } from '@/view/utils/Routes';
 
 export function DocSaveRooms() {
-  const { document_id } = useTypedParams(ROUTES.DOCUMENTS.SAVE_ROOMS);
-
   return (
     <main className="flex flex-col px-4 py-8 gap-y-8">
       <BackLink to="/documents" variant="exit">
@@ -44,7 +41,6 @@ export function DocSaveRooms() {
             <Link
               key={i}
               to={ROUTES.DOCUMENTS.SAVE_ROOMS.DETAILS.buildPath({
-                document_id,
                 room_id: String(i),
               })}
             >

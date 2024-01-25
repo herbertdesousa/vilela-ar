@@ -7,6 +7,7 @@ type TProps = Props & {
   size?: '4/1' | '4/3';
   display?: 'center' | 'between';
   onClick?(): void;
+  className?: string;
 };
 
 export function ButtonRoot({
@@ -15,6 +16,7 @@ export function ButtonRoot({
   display = 'center',
   variant = 'primary',
   onClick,
+  className,
 }: TProps) {
   return (
     <button
@@ -31,6 +33,7 @@ export function ButtonRoot({
           'bg-blue-100 text-blue-600 hover:bg-blue-200',
         variant === 'outline' &&
           'bg-white border border-slate-200 hover:border-slate-300',
+        className,
       )}
     >
       {children}

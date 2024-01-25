@@ -1,4 +1,4 @@
-import { MdAdd, MdEdit } from 'react-icons/md';
+import { MdAdd, MdDelete, MdEdit } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useTypedParams } from 'react-router-typesafe-routes/dom';
 
@@ -6,7 +6,9 @@ import { BackLink, Button, List } from '@/view/components';
 import { ROUTES } from '@/view/utils/Routes';
 
 export function DocSaveRoomsDetails() {
-  const { document_id } = useTypedParams(ROUTES.DOCUMENTS.SAVE_ROOMS.DETAILS);
+  const { document_id, room_id } = useTypedParams(
+    ROUTES.DOCUMENTS.SAVE_ROOMS.DETAILS,
+  );
 
   return (
     <main className="flex flex-col px-4 py-8 gap-y-8">
@@ -33,9 +35,9 @@ export function DocSaveRoomsDetails() {
           {[1, 2, 3].map((i) => (
             <Link
               key={i}
-              to={ROUTES.DOCUMENTS.SAVE_ROOMS.DETAILS.buildPath({
-                document_id,
-                room_id: String(i),
+              to={ROUTES.DOCUMENTS.SAVE_ROOMS.DETAILS.DEVICE.buildPath({
+                device_id: String(i),
+                room_id,
               })}
             >
               <List.Item>
@@ -52,7 +54,7 @@ export function DocSaveRoomsDetails() {
       <div className="w-full h-px bg-slate-300"></div>
 
       <Button.Root variant="outline">
-        <Button.Icon Icon={MdAdd} variant="error" />
+        <Button.Icon Icon={MdDelete} variant="error" />
         <Button.Text variant="inhert">
           Excluir <u>Escritório</u>
         </Button.Text>
