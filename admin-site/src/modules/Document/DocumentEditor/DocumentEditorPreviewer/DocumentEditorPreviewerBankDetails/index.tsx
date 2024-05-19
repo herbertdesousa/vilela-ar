@@ -52,7 +52,7 @@ const DocumentEditorPreviewerBankDetails: React.FC = () => {
           <div className="mt-1 text-xs font-medium">
             <p>
               <span className="underline">Nome</span>
-              :&nbsp;José Aparecido Vilela
+              :&nbsp;Vilela Ar
             </p>
             <p>
               <span className="underline">CNPJ</span>
