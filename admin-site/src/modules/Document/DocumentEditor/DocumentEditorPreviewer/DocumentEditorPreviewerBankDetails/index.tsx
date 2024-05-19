@@ -20,7 +20,7 @@ const DocumentEditorPreviewerBankDetails: React.FC = () => {
 
       <div>
         <div className="mt-12 ml-12">
-          <h3 className="text-base font-semibold">Bradesco</h3>
+          <h3 className="text-base font-semibold">Pessoa Física - Bradesco</h3>
 
           <div className="mt-1 text-xs font-medium">
             <p>
@@ -39,19 +39,36 @@ const DocumentEditorPreviewerBankDetails: React.FC = () => {
               <span className="underline">Conta</span>
               :&nbsp;Bradesco C.C. 0705106.9
             </p>
+            <p>
+              <span className="underline">Chave PIX</span>
+              :&nbsp;033.448.179-14
+            </p>
           </div>
         </div>
-        <div className="mt-8 ml-12">
-          <h3 className="text-base font-semibold">PIX</h3>
+        
+        <div className="mt-12 ml-12">
+          <h3 className="text-base font-semibold">Pessoa Juridica - Nubank</h3>
 
           <div className="mt-1 text-xs font-medium">
             <p>
-              <span className="underline">Tipo</span>
-              :&nbsp;CPF
+              <span className="underline">Nome</span>
+              :&nbsp;José Aparecido Vilela
             </p>
             <p>
-              <span className="underline">Chave</span>
-              :&nbsp;033.448.179-14
+              <span className="underline">CNPJ</span>
+              :&nbsp;29.429.191/0001-93
+            </p>
+            <p>
+              <span className="underline">Agência</span>
+              :&nbsp;0001
+            </p>
+            <p>
+              <span className="underline">Conta</span>
+              :&nbsp;Nubank S.A. 103414779-0
+            </p>
+            <p>
+              <span className="underline">Chave PIX</span>
+              :&nbsp;29.429.191/0001-93
             </p>
           </div>
         </div>
